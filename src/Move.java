@@ -2,18 +2,20 @@ import java.util.ArrayList;
 
 public class Move {
 
-	public Move(Piece piece, int xValue, int yValue){
+	public Move(Piece piece, int xValue, int yValue, Boolean capturePiece){
 		
 		p = piece;
 		x = xValue;
 		y = yValue;
 		ArrayList<Move> m = new ArrayList<Move>();
 		moves = m;
+		capture = capturePiece;
 	}
 	
 	private Piece p;
 	private int x, y;
-	private ArrayList<Move> moves; 
+	private ArrayList<Move> moves;
+	private Boolean capture;
 	
 	public Piece getP() {
 		return p;
@@ -38,6 +40,12 @@ public class Move {
 	}
 	public void setMoves(ArrayList<Move> moves) {
 		this.moves = moves;
+	}
+	public Boolean getCapture() {
+		return capture;
+	}
+	public void setCapture(Boolean capture) {
+		this.capture = capture;
 	}
 	
 }
