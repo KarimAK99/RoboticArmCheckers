@@ -1,50 +1,38 @@
-import java.util.ArrayList;
-
 public class Move {
 
-	public Move(Piece piece, int xValue, int yValue, Boolean capturePiece){
+	public Move(int start, int end, boolean jump, int capture){
 		
-		p = piece;
-		x = xValue;
-		y = yValue;
-		ArrayList<Move> m = new ArrayList<Move>();
-		moves = m;
-		capture = capturePiece;
+		this.start = start;
+		this.end = end;
+		this.jump = jump;
+		this.capture = capture;
 	}
 	
-	private Piece p;
-	private int x, y;
-	private ArrayList<Move> moves;
-	private Boolean capture;
+	private int start, end, capture;
+	private boolean jump;
 	
-	public Piece getP() {
-		return p;
+	public int getStart() {
+		return start;
 	}
-	public void setP(Piece p) {
-		this.p = p;
+	public void setStart(int start) {
+		this.start = start;
 	}
-	public int getX() {
-		return x;
+	public int getEnd() {
+		return end;
 	}
-	public void setX(int x) {
-		this.x = x;
+	public void setEnd(int end) {
+		this.end = end;
 	}
-	public int getY() {
-		return y;
+	public boolean isJump() {
+		return jump;
 	}
-	public void setY(int y) {
-		this.y = y;
+	public void setJump(boolean jump) {
+		this.jump = jump;
 	}
-	public ArrayList<Move> getMoves() {
-		return moves;
-	}
-	public void setMoves(ArrayList<Move> moves) {
-		this.moves = moves;
-	}
-	public Boolean getCapture() {
+	public int getCapture() {
 		return capture;
 	}
-	public void setCapture(Boolean capture) {
+	public void setCapture(int capture) {
 		this.capture = capture;
 	}
 	
