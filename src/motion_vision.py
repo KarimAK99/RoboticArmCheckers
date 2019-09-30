@@ -4,6 +4,7 @@ import datetime
 import imutils
 import time
 import cv2
+import numpy as np
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -49,6 +50,23 @@ while True:
                             cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
 
+    # color detection, works best w blue
+    # define the list of boundaries
+    boundaries = [([86, 31, 4], [220, 88, 50])]
+
+    # loop over the boundaries
+    for (lower, upper) in boundaries:
+        # create NumPy arrays from the boundaries
+        lower = np.array(lower, dtype="uint8")
+        upper = np.array(upper, dtype="uint8")
+
+        # find the colors within the specified boundaries and apply
+        # the mask
+        mask = cv2.inRange(frame, lower, upper)
+        output = cv2.bitwise_and(frame, frame, mask=mask)
+
+    imageOut = np.hstack([frame, output])
+
     # loop over the contours
     for c in cnts:
         # if the contour is too small, ignore it
@@ -62,14 +80,15 @@ while True:
         state = "moving"
 
     # show the frame and record if the user presses a key
-    cv2.imshow("Security Feed", frame)
+    cv2.imshow("move Feed", frame)
     cv2.imshow("Thresh", thresh)
     cv2.imshow("Frame Delta", frameDelta)
+    cv2.imshow("colors", output)
     print(state)
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
-h# cleanup the camera and close any open windows
+# cleanup the camera and close any open windows
 print(state)
 vs.stop() if args.get("video", None) is None else vs.release()
 cv2.destroyAllWindows()
