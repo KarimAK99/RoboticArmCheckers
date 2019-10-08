@@ -1,18 +1,15 @@
 //Kinematics: Task01 FK
 
 /** TODO
- *  Make the arms move slower
- *    -implement intermediate waypoints via movement trajectory
- *    
- *  Better callibrate arm movements
- *  
- *  Implement python serial communication
+ *  Finetune parameters:
+ *    -movement boundaries
+ *    -movement delay times
  */
 
 //Specification of PWM limits (for servo: TGY 50090M Servo):
 //Please enter the servo min and max limits for servo 1 and 2 here
 //You can find the corresponding limits on a note in your EDMO-box
-int SERVOMIN[]  {123, 132, 107}; //{min Servo1, min Servo 2} ->this is the 'minimum' pulse length count (out of 4096) for each servo
+int SERVOMIN[]  {123, 131, 107}; //{min Servo1, min Servo 2} ->this is the 'minimum' pulse length count (out of 4096) for each servo
 int SERVOMAX[]  {532, 340, 545}; //{max Servo1, max Servo 2} ->this is the 'maximum' pulse length count (out of 4096) for each servo
 
 #define NUM_MOTORS 3 // for now we only use two joints simultaneously
@@ -27,7 +24,11 @@ int SERVOMAX[]  {532, 340, 545}; //{max Servo1, max Servo 2} ->this is the 'maxi
 
 float incoming[NUM_MOTORS]; //buffer
 float pwmvalue[NUM_MOTORS]; //buffer
+float startPos[NUM_MOTORS]; //buffer
 float calib[NUM_MOTORS]; // used to calibrate servo offsets
+byte turnDelay = 17;
+byte longDelay = 1000;
+byte shortDelay = 100;
 byte i = 0;
 char record[100];
 char recvchar;
@@ -46,13 +47,20 @@ void setup()
   pwm.setPWMFreq(60); 
   delay(10);
   zeroCalib();
+  
   // offsets of angular positions to be determined by students for each motor
   setCalib(0,5); // offset for motor 1
   setCalib(1,7); // offset for motor 2
   setCalib(2,-12); // offset for motor 3
+  startPos[0] = 338;
+  pwm.setPWM(0, 0, (startPos[0]));
+  startPos[1] = 331;
+  pwm.setPWM(1, 0, (startPos[1]));
+  startPos[2] = 285;
+  pwm.setPWM(2, 0, (startPos[2]));
 
   // Electromagnet code.
-  delay(1000);
+  delay(longDelay);
   
   // Robo-arm code.
   while(!Serial);
@@ -103,19 +111,60 @@ void getData(char record[])
 // update servo motor positions
 void writeToMotor()
 {
+    // Correct input amount check.
     if(i == (NUM_MOTORS+1))
     {
+        // Preset the magnet, for convenience while playing.
+        if(incoming[NUM_MOTORS] == 0) electromagnetOff();
+        else if(incoming[NUM_MOTORS] == 1) electromagnetOn();
+
+        // Loop though actuators to set new positions.
         for (byte j = 0 ; j < (NUM_MOTORS) ; j++)
         { 
-          incoming[j] += calib[j];
+          // Calibration.
+          if (j == 1) // This is so inputting is nicer for the user :)
+          {
+            float temp = -1*incoming[j];
+            temp -= calib[j] - 90;
+            incoming[j] = temp;
+          }
+          else incoming[j] += calib[j];
+
+          // Arm movement.
           pwmvalue[j] = map(incoming[j],LEFTEND,RIGHTEND,SERVOMIN[j],SERVOMAX[j]);
           // do not remove this safety function to avoid hardware damages
           pwmvalue[j] = constrain(pwmvalue[j],SERVOMIN[j],SERVOMAX[j]);
-          pwm.setPWM(j, 0, pwmvalue[j]); // function by Adafruit library
-          delay(1300);  
+          
+          // Shortcut for being speedy.
+          if (startPos[j] == pwmvalue[j]) delay(shortDelay);
+          else
+          {
+            // Directional check.
+            float diff = pwmvalue[j] - startPos[j];
+            if (diff > 0)
+            {
+              for (int q = 0; q < diff; q++)
+              {
+                float destPos = startPos[j] + q;
+                pwm.setPWM(j, 0, destPos); // function by Adafruit library
+                delay(turnDelay);
+              }
+            }
+            else 
+            {
+              for (int q = 0; q < (-diff); q++)
+              {
+                float destPos = startPos[j] - q;
+                pwm.setPWM(j, 0, destPos); // function by Adafruit library
+                delay(turnDelay);
+              }
+            }
+            startPos[j] = pwmvalue[j];
+          }
+          
+          // Changing to next actuator.
+          delay(shortDelay);
         }
-        if(incoming[NUM_MOTORS] == 0) electromagnetOff();
-        else if(incoming[NUM_MOTORS] == 1) electromagnetOn();
     }
     else
     {
@@ -156,12 +205,12 @@ void electromagnetOff()
 {
     digitalWrite(6,LOW);
     Serial.println("Set to low. Turning magnetism on...");
-    delay(1300);
+    delay(longDelay); // So that the magnet has time to pick up a piece.
 }
 
 void electromagnetOn()
 {
     digitalWrite(6,HIGH);
     Serial.println("Set to high. Turning magnetism off... Please beware of heat");
-    delay(1300);
+    delay(shortDelay);
 }
