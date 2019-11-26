@@ -5,6 +5,7 @@ import imutils
 import time
 import cv2
 import numpy as np
+import json
 
 movingState = " "
 blueState = ''
@@ -59,7 +60,19 @@ def motion_color():
                                 cv2.CHAIN_APPROX_SIMPLE)
         cnts = imutils.grab_contours(cnts)
 
-        # color detection, works best w blue
+        # loop over the contours
+        for c in cnts:
+            # if the contour is too small, ignore it
+            if cv2.contourArea(c) < args["min_area"]:
+                continue
+
+            # compute the bounding box for the contour, draw it on the frame,
+            # and update the state
+            (x, y, w, h) = cv2.boundingRect(c)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            movingState = "moving"
+
+        # color detection
         # define the list of boundaries
         hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         boundaries = [([97, 100, 100], [110, 255, 255])]
@@ -77,18 +90,6 @@ def motion_color():
             if cv2.countNonZero(mask) > 50:
                 blueState = "blue"
         imageOut = np.hstack([frame, output])
-
-        # loop over the contours
-        for c in cnts:
-            # if the contour is too small, ignore it
-            if cv2.contourArea(c) < args["min_area"]:
-                continue
-
-            # compute the bounding box for the contour, draw it on the frame,
-            # and update the state
-            (x, y, w, h) = cv2.boundingRect(c)
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            movingState = "moving"
 
         # show the frame and record if the user presses a key
         cv2.imshow("move Feed", frame)
@@ -109,11 +110,12 @@ def motion_color():
         print(get_blue())
         print(get_move())
         print(get_robot_state())
+        write_data()
+        read_data()
 
-    # cleanup the camera and close any open windows
     # print(movingState)
     # print(blueState)
-
+    # cleanup the camera and close any open windows
     vs.stop() if args.get("video", None) is None else vs.release()
     cv2.destroyAllWindows()
 
@@ -128,6 +130,22 @@ def get_move():
 
 def get_robot_state():
     return robot_state
+
+
+def write_data():
+    data = {'move': []}
+    data['move'].append({
+        'move': get_robot_state()
+    })
+    with open('data.json', 'w') as moveData:
+        json.dump(data, moveData)
+
+
+def read_data():
+    with open('data.json') as read:
+        data = json.load(read)
+        for d in data['move']:
+            print('state: ' + d['move'])
 
 
 if __name__ == '__main__':
