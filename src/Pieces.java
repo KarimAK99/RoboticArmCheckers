@@ -1,4 +1,3 @@
-
 public class Pieces {
 
 	public Pieces(boolean robot, boolean king, int location) {
@@ -9,6 +8,13 @@ public class Pieces {
 		
 	}
 
+	public Pieces(Pieces piece) {
+		
+		this.robot = piece.isRobot();
+		this.king = piece.isKing();
+		this.location = piece.getLocation();
+	}
+	
 	private boolean robot;
 	private boolean king;
 	private int location;

@@ -1,4 +1,3 @@
-
 public class Tiles {
 
 	
@@ -16,6 +15,20 @@ public class Tiles {
 		this.jumprightdown = jumprightdown;
 	}
 	
+	public Tiles(Tiles tile) {
+		
+		this.location = tile.getLocation();
+		this.occupied = tile.isOccupied();
+		this.leftup = tile.getLeftup();
+		this.rightup = tile.getRightup();
+		this.leftdown = tile.getLeftdown(); 
+		this.rightdown = tile.getRightdown();
+		this.jumpleftup = tile.getJumpleftup();
+		this.jumprightup = tile.getJumprightup();
+		this.jumpleftdown = tile.getJumpleftdown(); 
+		this.jumprightdown = tile.getJumprightdown();
+	}
+	
 	private int location;
 	private boolean occupied;
 	private int leftup;
@@ -27,6 +40,12 @@ public class Tiles {
 	private int jumpleftdown;
 	private int jumprightdown;
 	private String status;
+	
+	public void setEmpty() {
+		
+		occupied = false;
+		status = " ";
+	}
 	
 	public int getLocation() {
 		return location;
