@@ -7,16 +7,16 @@ cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 retval, frame = cam.read()
 if retval != True:
-    #replace this by popup window
+    # replace this by popup window
     raise ValueError("Can't read frame. Check if webcam is connected !!")
 cv2.imwrite('img2.jpg', frame)
-#cv2.imshow("img1", frame)
+# cv2.imshow("img1", frame)
 img = cv2.imread('img2.jpg')
 img_hsv = cv2.imread('img2.jpg')
 
-#img = cv2.imread('arm1.jpg')
-#r = cv2.selectROI(img)
-#img = img[int(r[1]):int(r[1] + r[3]), int(r[0]):int(r[0] + r[2])]
+# img = cv2.imread('arm1.jpg')
+# r = cv2.selectROI(img)
+# img = img[int(r[1]):int(r[1] + r[3]), int(r[0]):int(r[0] + r[2])]
 
 hsvL = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 

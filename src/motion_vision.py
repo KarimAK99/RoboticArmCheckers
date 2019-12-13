@@ -15,7 +15,7 @@ robot_state = ''
 def motion_color():
     # construct the argument parser and parse the arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-a", "--min-area", type=int, default=3000, help="minimum area size")
+    ap.add_argument("-a", "--min-area", type=int, default=2500, help="minimum area size")
     args = vars(ap.parse_args())
     vs = VideoStream(src=0).start()  # laptop camera
     # vs = VideoStream(src=1).start()  # robot camera
@@ -30,6 +30,7 @@ def motion_color():
     while True:
         # grab the current frame and initialize the occupied/unoccupied
         frame = vs.read()
+
         frame = frame if args.get("video", None) is None else frame[1]
         movingState = "not moving"
         blueState = "no blue"
@@ -146,6 +147,13 @@ def read_data():
         data = json.load(read)
         for d in data['move']:
             print('state: ' + d['move'])
+
+
+def rescale_frame(frame, percent):
+    width = int(frame.shape[1] * percent / 100)
+    height = int(frame.shape[0] * percent / 100)
+    dim = (width, height)
+    return cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
 
 
 if __name__ == '__main__':

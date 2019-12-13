@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 // import java.util.concurrent.TimeUnit;
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.FileOutputStream;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonWriter;
 public class Communicator {
 
 	public static void main(String args[]) {
@@ -70,25 +75,55 @@ public class Communicator {
 	}
 	
 	private static Boolean legalMove(ArrayList<Pieces> allpieces, Move m) {
-		
+
 		Game n = new Game();
-		
+
 		n.updateGameState(allpieces);
-		
+
 		ArrayList<Move> possibleMoves = n.findMoves(n.PlayerPieces, n.AllTiles);
-		
+
 		boolean legal = false;
-		
+
 		for (int i = 0; i < possibleMoves.size(); i++) {
-			
-			if(possibleMoves.get(i).getStart() == m.getStart() && possibleMoves.get(i).getEnd() == m.getEnd()) {
-				
+
+			if (possibleMoves.get(i).getStart() == m.getStart() && possibleMoves.get(i).getEnd() == m.getEnd()) {
+
 				legal = true;
 			}
 		}
-		
+
 		n = null;
-		
+
 		return legal;
+	}
+	public void WriteToJSON(){
+		/* create an array obj :
+		 JsonArray value = Json.createArrayBuilder()
+         .add(Json.createObjectBuilder() use this for each different thing in array
+         .add("", ""))
+         .build();
+		 */
+			JsonWriter writer = Json.createWriter(new FileOutputStream("move Data"));
+			writer.writeArray() //name of the array obj
+			writer.close();
+		}
+	public void readFromJSON(){
+		Object obj = parser.parse(new FileReader("E:\\json.txt"));
+
+		JSONObject jsonObject = (JSONObject) obj;
+
+		System.out.println(jsonObject.get("move Data"));
+
+		JSONArray solutions = (JSONArray) jsonObject.get("move Data");
+
+		Iterator iterator = solutions.iterator();
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next());
+		}
+
+	}
+
+	public class readFromJSON{
+
 	}
 }
