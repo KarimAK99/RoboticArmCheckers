@@ -1,21 +1,26 @@
 import cv2
 import numpy as np
 import imutils
+import json
+import time
 
-cam = cv2.VideoCapture(1,cv2.CAP_DSHOW)
-cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-retval, frame = cam.read()
-if retval != True:
-    #replace this by popup window
-    raise ValueError("Can't read frame. Check if webcam is connected !!")
-cv2.imwrite('img2.jpg', frame)
-#cv2.imshow("img1", frame)
-img = cv2.imread('img2.jpg')
-img_hsv = cv2.imread('img2.jpg')
+start = int(round(time.time() * 1000))
 
-#img = cv2.imread('finaltestarm.jpg')
-#img_hsv = cv2.imread('finaltestarm.jpg')
+#cam = cv2.VideoCapture(1,cv2.CAP_DSHOW)
+#cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+#cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+#retval, frame = cam.read()
+#if retval != True:
+#    #replace this by popup window
+#    raise ValueError("Can't read frame. Check if webcam is connected !!")
+#cv2.imwrite('img2.jpg', frame)
+##cv2.imshow("img1", frame)
+#img = cv2.imread('img2.jpg')
+#img_hsv = cv2.imread('img2.jpg')
+
+
+img = cv2.imread('finaltestarm.jpg')
+img_hsv = cv2.imread('finaltestarm.jpg')
 
 #detect top left corner
 hsvY = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -119,8 +124,18 @@ for c in circle_color:
 #where colour=1 -> black, colour=2 -> white
 #X from left to right 0 -> 7
 #Y from top to bottom 0 -> 7
-print(circle_position)
+#print(circle_position)
 
+boardData = {'board': []}
+boardData['board'].append({
+    'board': circle_position
+})
+with open('boardData.json', 'w') as boardState:
+    json.dump(boardData, boardState)
+
+end = milli_sec = int(round(time.time() * 1000))
+duration = end - start
+print(duration)
 
 cv2.imshow('detected circles',img_hsv)
 cv2.waitKey(0)
