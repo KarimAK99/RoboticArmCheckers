@@ -119,6 +119,12 @@ for c in circle_color:
 #Y from top to bottom 0 -> 7
 print(circle_position)
 
+boardData = {'board': []}
+boardData['board'].append({
+    'board': circle_position
+})
+with open('boardData.json', 'w') as boardState:
+    json.dump(boardData, boardState)
 
 cv2.imshow('detected circles',img_hsv)
 cv2.waitKey(0)
