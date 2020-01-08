@@ -1,16 +1,14 @@
+import java.io.*;
 import java.util.ArrayList;
-// import java.util.concurrent.TimeUnit;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.FileOutputStream;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonWriter;
+import java.util.Iterator;
+import org.json.simple.parser.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 public class Communicator {
 
-	public static void main(String args[]) {
-		
-		Game g = new Game();
+	public static void main(String args[]) throws Exception {
+		//readFromJSON();
+		/*Game g = new Game();
 		
 		boolean RobotMove = true;
 		
@@ -36,30 +34,31 @@ public class Communicator {
 				sendLegality(false);
 			}
 			
-		}
-		
+		}*/
+
+
 	}
-	
+
 	// Method that should read move that player plays from CV
 	private static Move readMove() {
-		
+
 		return null;
 	}
-	
+
 	// Method that should read all the current pieces on the board
-	private static ArrayList<Pieces> readAllPieces(){
-		
+	private static ArrayList<Pieces> readAllPieces() {
+
 		return null;
 	}
-	
+
 	// Method that should send the robot move to control
 	private static void sendMove(Move m) {
-		
+
 	}
-	
+
 	// Method that should send the legality of the move played by the player back to CV
 	private static void sendLegality(boolean legal) {
-		
+
 		// pause if move isn't legal?
 		
 /*		if(!legal) {
@@ -73,7 +72,7 @@ public class Communicator {
 		}
 */
 	}
-	
+
 	private static Boolean legalMove(ArrayList<Pieces> allpieces, Move m) {
 
 		Game n = new Game();
@@ -96,34 +95,23 @@ public class Communicator {
 
 		return legal;
 	}
-	public void WriteToJSON(){
+
+	public void WriteToJSON() throws FileNotFoundException {
 		/* create an array obj :
 		 JsonArray value = Json.createArrayBuilder()
          .add(Json.createObjectBuilder() use this for each different thing in array
          .add("", ""))
          .build();
 		 */
-			JsonWriter writer = Json.createWriter(new FileOutputStream("move Data"));
-			writer.writeArray() //name of the array obj
-			writer.close();
-		}
-	public void readFromJSON(){
-		Object obj = parser.parse(new FileReader("E:\\json.txt"));
-
-		JSONObject jsonObject = (JSONObject) obj;
-
-		System.out.println(jsonObject.get("move Data"));
-
-		JSONArray solutions = (JSONArray) jsonObject.get("move Data");
-
-		Iterator iterator = solutions.iterator();
-		while (iterator.hasNext()) {
-			System.out.println(iterator.next());
-		}
-
+		/*	JSONWriter writer = JSON.createWriter(new FileOutputStream("move Data"));
+			writer.writeArray(); //name of the array obj
+			writer.close();*/
 	}
 
-	public class readFromJSON{
+	//public static void readFromJSON() throws Exception {
 
-	}
+
+	//}
 }
+
+
