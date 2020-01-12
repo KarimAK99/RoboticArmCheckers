@@ -1,5 +1,4 @@
 import java.io.*;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,7 +9,7 @@ public class WriteToJSON {
         jo.put("Board", "data");
         jo.put("firstName", "John");
         jo.put("lastName", "Doe");
-        //make data into an array, use that!! don't make it loose data.
+        //make data into an array, use that!! don't make it loose data
         JSONArray ja = new JSONArray();
         ja.put(jo);
 
