@@ -1,19 +1,25 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import org.json.simple.parser.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class WriteToJSON {
     public static void main(String[] args) throws Exception {
         JSONObject jo = new JSONObject();
         //put data to JSONObject
-        jo.put("some", "data");
+        jo.put("Board", "data");
+        jo.put("firstName", "John");
+        jo.put("lastName", "Doe");
+        //make data into an array, use that!! don't make it loose data.
+        JSONArray ja = new JSONArray();
+        ja.put(jo);
 
-        // writing JSON to file
-        PrintWriter pw = new PrintWriter("boardData.json");
-        pw.write(jo.toJSONString());
+        JSONObject mainObj = new JSONObject();
+        mainObj.put("employees", ja);
+
+        // writing JSON to file, specify file name with src/ to write it in the src folder
+        PrintWriter pw = new PrintWriter("src/boardData.json");
+        pw.write(mainObj.toString());
 
         pw.flush();
         pw.close();
