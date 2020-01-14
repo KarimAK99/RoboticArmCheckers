@@ -21,16 +21,16 @@ public class Main
 		while(true)
 		{
 			// Call Stefan. Computer Vision to read the curent board state.
-			Process cvStateProcess = Runtime.getRuntime().exec("python test.py");
+			//Process cvStateProcess = Runtime.getRuntime().exec("python test.py");
 
 			// Call Karim. Will calculate the AI's next move.
 			//
 
 			// Call Thibaut. Computer Vision to determine if there is obstruction of the board.
-			Process cvObstrustionProcess = Runtime.getRuntime().exec("python test.py");
+			Process cvObstrustionProcess = Runtime.getRuntime().exec("python src/motion_vision.py");
 
 			// Call Olive. Will move the robot arm accordingly.
-			Process controlProcess = Runtime.getRuntime().exec("python test.py");
+			//Process controlProcess = Runtime.getRuntime().exec("python test.py");
 		}
 
 		

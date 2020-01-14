@@ -54,6 +54,122 @@ public class Communicator {
 	// Method that should send the robot move to control
 	private static void sendMove(Move m) {
 
+		int x1 = 0;
+		int y1 = 0;
+		int x2 = 0;
+		int y2 = 0;
+		
+		if(m.getStart() >= 5) {
+			if(m.getStart() >= 9) {
+				if(m.getStart() >= 13) {
+					if(m.getStart() >= 17) {
+						if(m.getStart() >= 21) {
+							if(m.getStart() >= 25) {
+								if(m.getStart() >= 29) {
+									y1 = 8;
+								} else {
+									y1 = 7;
+								}
+							} else {
+								y1 = 6;
+							}
+						} else {
+							y1 = 5;
+						}
+					} else {
+						y1 = 4;
+					}
+				} else {
+					y1 = 3;
+				}
+			} else {
+				y1 = 2;
+			}
+		} else {
+			y1 = 1;
+		}
+		
+		if(m.getStart()%8 == 1) {
+			x1 = 1;
+		}
+		if(m.getStart()%8 == 2) {
+			x1 = 3;
+		}
+		if(m.getStart()%8 == 3) {
+			x1 = 5;
+		}
+		if(m.getStart()%8 == 4) {
+			x1 = 7;
+		}
+		if(m.getStart()%8 == 0) {
+			x1 = 8;
+		}
+		if(m.getStart()%8 == 5) {
+			x1 = 2;
+		}
+		if(m.getStart()%8 == 6) {
+			x1 = 4;
+		}
+		if(m.getStart()%8 == 7) {
+			x1 = 6;
+		}
+		
+		if(m.getEnd() >= 5) {
+			if(m.getEnd() >= 9) {
+				if(m.getEnd() >= 13) {
+					if(m.getEnd() >= 17) {
+						if(m.getEnd() >= 21) {
+							if(m.getEnd() >= 25) {
+								if(m.getEnd() >= 29) {
+									y2 = 8;
+								} else {
+									y2 = 7;
+								}
+							} else {
+								y2 = 6;
+							}
+						} else {
+							y2 = 5;
+						}
+					} else {
+						y2 = 4;
+					}
+				} else {
+					y2 = 3;
+				}
+			} else {
+				y2 = 2;
+			}
+		} else {
+			y2 = 1;
+		}
+		
+		if(m.getEnd()%8 == 1) {
+			x2 = 1;
+		}
+		if(m.getEnd()%8 == 2) {
+			x2 = 3;
+		}
+		if(m.getEnd()%8 == 3) {
+			x2 = 5;
+		}
+		if(m.getEnd()%8 == 4) {
+			x2 = 7;
+		}
+		if(m.getEnd()%8 == 0) {
+			x2 = 8;
+		}
+		if(m.getEnd()%8 == 5) {
+			x2 = 2;
+		}
+		if(m.getEnd()%8 == 6) {
+			x2 = 4;
+		}
+		if(m.getEnd()%8 == 7) {
+			x2 = 6;
+		}
+		
+		
 	}
 
 	// Method that should send the legality of the move played by the player back to CV
@@ -73,6 +189,8 @@ public class Communicator {
 */
 	}
 
+	// method that checks if the move a player has done is legal
+	
 	private static Boolean legalMove(ArrayList<Pieces> allpieces, Move m) {
 
 		Game n = new Game();
