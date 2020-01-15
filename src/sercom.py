@@ -156,17 +156,19 @@ def push(movement, t1, t2, t3, m):
 
 
 def automaticMode():
-    
+
     while 1:
         # pause = input("press enter continue")
         move = readJson()
+        positions = readJJava()
         if move == 'allowed to move':
 
-            # Starting board position (read dis).
-			obX =
-			obY = 
-			dbX = 
-			dbY = 
+        # Starting board position (read dis).
+        #  positions = [xOld, xNew, yOld, yNew]
+			obX = positions[0]
+			obY = positions[2]
+			dbX = positions[1]
+			dbY = positions[3]
 
 			# Convert to distance in cm.
 			oldY = -2 + (obX - 4) * 3
@@ -188,7 +190,7 @@ def automaticMode():
             push(2, thetaOne, 140, thetaTwo, 0)
 
             # Lower arm and drop piece in new desired postition.
-            
+
             push(3, thetaEen, 170, thetaTwee, 1)
 
             # Raise arm without the piece, restart magnetism.
