@@ -216,6 +216,18 @@ def readJson():
         return move
 
 
+def readJJava():
+    with open('moveToControl.json') as read:
+        data = json.load(read)
+    for d in data['positions']:
+        xOld = d['xOld']
+        xNew = d['xNew']
+        yOld = d['yOld']
+        yNew = d['yNew']
+        positions = [xOld, xNew, yOld, yNew]
+        print('positions', positions)
+        return positions
+
 #
 #   START CODE
 # ==================================================

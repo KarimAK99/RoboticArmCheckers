@@ -1,9 +1,7 @@
 import java.io.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Iterator;
-import org.json.simple.parser.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 public class Communicator {
 
 	public static void main(String args[]) throws Exception {
@@ -35,6 +33,11 @@ public class Communicator {
 			}
 			
 		}*/
+		x1 = 1;
+		x2 =7 ;
+		y1 = 2;
+		y2 = 3;
+		WriteToJSON();
 
 
 	}
@@ -50,14 +53,13 @@ public class Communicator {
 
 		return null;
 	}
-
+	static int x1;
+	static int y1;
+	static int x2;
+	static int y2;
+	static int[] positions = new int[3];
 	// Method that should send the robot move to control
 	private static void sendMove(Move m) {
-
-		int x1 = 0;
-		int y1 = 0;
-		int x2 = 0;
-		int y2 = 0;
 		
 		if(m.getStart() >= 5) {
 			if(m.getStart() >= 9) {
@@ -168,6 +170,11 @@ public class Communicator {
 		if(m.getEnd()%8 == 7) {
 			x2 = 6;
 		}
+		positions[0] = x1;
+		positions[1] = x2;
+		positions[2]= y1;
+		positions[3] = y2;
+
 		
 		
 	}
@@ -214,22 +221,28 @@ public class Communicator {
 		return legal;
 	}
 
-	public void WriteToJSON() throws FileNotFoundException {
-		/* create an array obj :
-		 JsonArray value = Json.createArrayBuilder()
-         .add(Json.createObjectBuilder() use this for each different thing in array
-         .add("", ""))
-         .build();
-		 */
-		/*	JSONWriter writer = JSON.createWriter(new FileOutputStream("move Data"));
-			writer.writeArray(); //name of the array obj
-			writer.close();*/
+	public static void WriteToJSON() throws FileNotFoundException {
+		JSONObject move = new JSONObject();
+		//put data to JSONObject
+		move.put(("yOld"),y1);
+		move.put(("xOld"),x1);
+		move.put(("xNew"),x2);
+
+		move.put(("yNew"),y2);
+		//make data into an array, use that!! don't make it loose data
+		JSONArray ja = new JSONArray();
+		ja.put(move);
+
+		JSONObject mainObj = new JSONObject();
+		mainObj.put("positions", ja);
+
+		// writing JSON to file, specify file name with src/ to write it in the src folder
+		PrintWriter pw = new PrintWriter("src/moveToControl.json");
+		pw.write(mainObj.toString());
+
+		pw.flush();
+		pw.close();
 	}
-
-	//public static void readFromJSON() throws Exception {
-
-
-	//}
 }
 
 
