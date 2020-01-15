@@ -20,7 +20,7 @@ public class Communicator {
 
 	public static void main(String args[]) throws Exception {
 		//readFromJSON();
-		/*Game g = new Game();
+	/*	Game g = new Game();
 
 		boolean RobotMove = true;
 
@@ -33,8 +33,9 @@ public class Communicator {
 				RobotMove = false;
 			}
 
-			Move r = readMove();
+			ArrayList<Pieces> tempPrevious = g.AllPieces;
 			ArrayList<Pieces> allpieces = readAllPieces();
+			Move r = findMove(tempPrevious, allpieces);
 
 			if(legalMove(allpieces, r)) {
 
@@ -43,10 +44,12 @@ public class Communicator {
 				RobotMove = true;
 			} else {
 
+				//System.out.println("ERROR: Illegal move played");
 				sendLegality(false);
 			}
 
-		}*/
+		} */
+		
 		x1 = 1;
 		x2 =7 ;
 		y1 = 2;
@@ -57,19 +60,161 @@ public class Communicator {
 		System.out.println(Arrays.toString(xPos));
 		System.out.println(Arrays.toString(yPos));
 
-
 	}
 
 	// Method that should read move that player plays from CV
-	private static Move readMove() {
+	private static Move findMove(ArrayList<Pieces> prev, ArrayList<Pieces> current) {
 
-		return null;
+		Move m = null;
+		
+		ArrayList<Pieces> changed = new ArrayList<Pieces>();
+		ArrayList<Pieces> moved = new ArrayList<Pieces>();
+		
+		for(int i = 0; i < prev.size(); i++) {
+			
+			boolean exists = false;
+			
+			for(int j = 0; j < current.size(); j++) {
+				
+				if(prev.get(i).isRobot() == current.get(j).isRobot() && prev.get(i).isKing() == current.get(j).isKing() && prev.get(i).getLocation() == current.get(j).getLocation()) {
+					
+					exists = true;
+				}
+			}
+			
+			if(!exists) {
+				
+				changed.add(prev.get(i));
+			}
+		}
+		
+		for(int i = 0; i < current.size(); i++) {
+			
+			boolean exists = false;
+			
+			for(int j = 0; j < prev.size(); j++) {
+				
+				if(current.get(i).isRobot() == prev.get(j).isRobot() && current.get(i).isKing() == prev.get(j).isKing() && current.get(i).getLocation() == prev.get(j).getLocation()) {
+					
+					exists = true;
+				}
+			}
+			
+			if(!exists) {
+				
+				moved.add(current.get(i));
+			}
+		}
+		
+		if(changed.size() == 1 && moved.size() == 1) {
+			
+			boolean jump;
+			
+			if(Math.abs(changed.get(0).getLocation() - moved.get(0).getLocation()) > 5) { 
+				
+				jump = true;
+				
+			} else {
+				
+				jump = false;
+			}
+			
+			m = new Move(changed.get(0).getLocation(), moved.get(0).getLocation(), jump, 0); 
+		}
+		
+		if(changed.size() == 2) {
+			
+			if(changed.get(0).isRobot() == moved.get(0).isRobot()) {
+				
+				boolean jump;
+				
+				if(Math.abs(changed.get(0).getLocation() - moved.get(0).getLocation()) > 5) { 
+					
+					jump = true;
+					
+				} else {
+					
+					jump = false;
+				}
+				
+				m = new Move(changed.get(0).getLocation(), moved.get(0).getLocation(), jump, 0);
+			}
+			
+			if(changed.get(1).isRobot() == moved.get(0).isRobot()) {
+				
+				boolean jump;
+				
+				if(Math.abs(changed.get(1).getLocation() - moved.get(0).getLocation()) > 5) { 
+					
+					jump = true;
+					
+				} else {
+					
+					jump = false;
+				}
+				
+				m = new Move(changed.get(1).getLocation(), moved.get(0).getLocation(), jump, 0);
+			}
+		}
+		
+		return m;
 	}
 
 	// Method that should read all the current pieces on the board
 	private static ArrayList<Pieces> readAllPieces() {
 
-		return null;
+		ArrayList<Pieces> readPieces = new ArrayList<Pieces>();
+		
+		for(int i = 0; i < color.length; i++) {
+			
+			int location = 1;
+			
+			if (yPos[i] == 0 && xPos[i] == 1) {location = 29;}
+			if (yPos[i] == 0 && xPos[i] == 3) {location = 30;}
+			if (yPos[i] == 0 && xPos[i] == 5) {location = 31;}
+			if (yPos[i] == 0 && xPos[i] == 7) {location = 32;}
+			if (yPos[i] == 1 && xPos[i] == 0) {location = 25;}
+			if (yPos[i] == 1 && xPos[i] == 2) {location = 26;}
+			if (yPos[i] == 1 && xPos[i] == 4) {location = 27;}
+			if (yPos[i] == 1 && xPos[i] == 6) {location = 28;}
+			if (yPos[i] == 2 && xPos[i] == 1) {location = 21;}
+			if (yPos[i] == 2 && xPos[i] == 3) {location = 22;}
+			if (yPos[i] == 2 && xPos[i] == 5) {location = 23;}
+			if (yPos[i] == 2 && xPos[i] == 7) {location = 24;}
+			if (yPos[i] == 3 && xPos[i] == 0) {location = 17;}
+			if (yPos[i] == 3 && xPos[i] == 2) {location = 18;}
+			if (yPos[i] == 3 && xPos[i] == 4) {location = 19;}
+			if (yPos[i] == 3 && xPos[i] == 6) {location = 20;}
+			if (yPos[i] == 4 && xPos[i] == 1) {location = 13;}
+			if (yPos[i] == 4 && xPos[i] == 3) {location = 14;}
+			if (yPos[i] == 4 && xPos[i] == 5) {location = 15;}
+			if (yPos[i] == 4 && xPos[i] == 7) {location = 16;}
+			if (yPos[i] == 5 && xPos[i] == 0) {location = 9;}
+			if (yPos[i] == 5 && xPos[i] == 2) {location = 10;}
+			if (yPos[i] == 5 && xPos[i] == 4) {location = 11;}
+			if (yPos[i] == 5 && xPos[i] == 6) {location = 12;}
+			if (yPos[i] == 6 && xPos[i] == 1) {location = 5;}
+			if (yPos[i] == 6 && xPos[i] == 3) {location = 6;}
+			if (yPos[i] == 6 && xPos[i] == 5) {location = 7;}
+			if (yPos[i] == 6 && xPos[i] == 7) {location = 8;}
+			if (yPos[i] == 7 && xPos[i] == 0) {location = 1;}
+			if (yPos[i] == 7 && xPos[i] == 2) {location = 2;}
+			if (yPos[i] == 7 && xPos[i] == 4) {location = 3;}
+			if (yPos[i] == 7 && xPos[i] == 6) {location = 4;}
+			
+			boolean robotPiece;
+			//if(color[i] == ?) {robotPiece = true;} else {robotPiece = false;}
+			
+			boolean kingPiece;
+			//if(king[i] == ?) {kingPiece = true;} else {kingPiece = false;}
+			
+			//Pieces p = new Pieces(robotPiece, kingPiece, location);
+			//readPieces.add(p);
+			
+			
+		}
+		
+		return readPieces;
 	}
 	// Method that should send the robot move to control
 	private static void sendMove(Move m) {
