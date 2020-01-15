@@ -124,7 +124,7 @@ def inverseKinematics(xB, yB):
 
 
 #
-#   MODE 1: Teminal Mode
+#   MODE 1: Teminal Mode (for developement purposes)
 # ==================================================
 def terminalMode():
     val = input("Please input 1', 2', 3' and Magnet state:  ")
@@ -150,62 +150,52 @@ def terminalMode():
 def push(movement, t1, t2, t3, m):
     val = str(t1) + "," + str(t2) + "," + str(t3) + "," + str(m)
     val = val + "\n"
-    ser.write(val.encode())
+    ser.write(val.encode()) # YYY microcontroller dependency.
     print("Movement ", movement, ":  ", val, sep="")
-    moveCheck()
+    moveCheck() # YYY microcontroller dependency.
 
 
 def automaticMode():
-    # Ugly-af, copied-over code.
-
-    # Starting board position.
-    dbX = int(input("Desired x coordinate for the board please-- "))
-    dbY = int(input("Desired y coordinate for the board please-- "))
-    desiredY = -2 + (dbX - 4) * 3
-    desiredX = 2 + dbY * 3
-    print("Your desired coordinates are ", desiredX, desiredY)
-
-    # Comment explaining what in the loop
-    [thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
-    push(3, thetaEen, 160, thetaTwee, 1)
-    push(4, thetaEen, 0, thetaTwee, 0)
-
-    # Set-up movement for the next move.
-    thetaEenP = thetaEen
-    thetaTweeP = thetaTwee
-
+    
     while 1:
-        # XXX Read input somehow
         # pause = input("press enter continue")
         move = readJson()
         if move == 'allowed to move':
-            dbX = int(input("Desired x coordinate for the board please-- "))
-            dbY = int(input("Desired y coordinate for the board please-- "))
 
-            # Convert board coordinates to cm
-            # and some x-y swapping.
-            desiredY = -2 + (dbX - 4) * 3
-            desiredX = 2 + dbY * 3
-            print("Your desired coordinates are ", desiredX, desiredY)
+            # Starting board position (read dis).
+			obX =
+			obY = 
+			dbX = 
+			dbY = 
 
+			# Convert to distance in cm.
+			oldY = -2 + (obX - 4) * 3
+			oldX = 2 + obY * 3
+			desiredY = -2 + (dbX - 4) * 3
+			desiredX = 2 + dbY * 3
+			print("Your desired move is from [", oldX, ", ", oldY, "] to [", desiredX, ", ", desiredY, "]-- ", sep="")
+
+			# Calculate angles for the move. Sorry about the confusing names...
+			[thetaOne, thetaTwo] = inverseKinematics(oldX, oldY)
+			[thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
+			print("The generated angles are [", thetaOne, ", ", thetaTwo, "] to [", thetaEen, ", ", thetaTwee, "]-- ", sep="")
+
+			# Movements!
             # Move the arm down, grab piece from previous desired position.
-            push(1, thetaEenP, 180, thetaTweeP, 0)
+            push(1, thetaOne, 180, thetaTwo, 0)
 
             # Raise the arm with the piece.
-            push(2, thetaEenP, 140, thetaTweeP, 0)
+            push(2, thetaOne, 140, thetaTwo, 0)
 
             # Lower arm and drop piece in new desired postition.
-            [thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
+            
             push(3, thetaEen, 170, thetaTwee, 1)
 
             # Raise arm without the piece, restart magnetism.
             push(4, thetaEen, 0, thetaTwee, 0)
 
-            # Set-up movement for the next move.
-            thetaEenP = thetaEen
-            thetaTweeP = thetaTwee
-
-    ser.close #closes serial port
+	# Microcontroller dependency that is superfluous anyway.
+    #ser.close #closes serial port
 
 
 def readJson():
@@ -232,28 +222,23 @@ def readJJava():
 #   START CODE
 # ==================================================
 
-# Actuator length constants.
-LENGTHONE = 17  # Length of the z-axis actuator.
-LENGTHTWO = 10.5  # Length of the shortest actuator.
+def main():
+	# Actuator length constants.
+	LENGTHONE = 17  # Length of the z-axis actuator.
+	LENGTHTWO = 10.5  # Length of the shortest actuator.
 
-# Actuator yam coordinates for desired endpoint calculation.
-ARMPOSITIONX = 12
-ARMPOSITIONY = -6
+	# Actuator yam coordinates for desired endpoint calculation.
+	ARMPOSITIONX = 12
+	ARMPOSITIONY = -6
 
-print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
-print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
+	print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
+	print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
 
-baudRate = 9600
-serPort = "/dev/ttyACM0"
-ser = serial.Serial(serPort, baudRate, timeout=5)
-print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-startMarker = 60
-endMarker = 62
+	baudRate = 9600
+	serPort = "/dev/ttyACM0"
+	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+	startMarker = 60
+	endMarker = 62
 
-"""mode = input("Please enter 0 for terminal mode and 1 for automatic mode-- :   ")
-if mode == "0":
-    terminalMode()
-if mode == "1":
-    automaticMode()"""
-
-automaticMode()
+	automaticMode()
