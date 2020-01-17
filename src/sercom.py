@@ -169,45 +169,46 @@ def push(ser, movement, t1, t2, t3, m):
 
 def automaticMode(ser):
     
-    while 1:
-        # pause = input("press enter continue")
-        move = readJson()
-        if move == 'allowed to move':
-            position = readJJava()
-            # Starting board position (read dis).
-            obX = position[0]
-            obY = position[2]
-            dbX = position[1]
-            dbY = position[3]
 
-            # Convert to distance in cm.
-            oldY = -2 + (obX - 4) * 3
-            oldX = 2 + obY * 3
-            desiredY = -2 + (dbX - 4) * 3
-            desiredX = 2 + dbY * 3
-            print("Your desired move is from [", oldX, ", ", oldY, "] to [", desiredX, ", ", desiredY, "]-- ", sep="")
+    # pause = input("press enter continue")
+    move = readJson()
+    if move == 'allowed to move':
+        
+        position = readJJava()
+        # Starting board position (read dis).
+        obX = position[0]
+        obY = position[2]
+        dbX = position[1]
+        dbY = position[3]
 
-            # Calculate angles for the move. Sorry about the confusing names...
-            [thetaOne, thetaTwo] = inverseKinematics(oldX, oldY)
-            [thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
-            print("The generated angles are [", thetaOne, ", ", thetaTwo, "] to [", thetaEen, ", ", thetaTwee, "]-- ", sep="")
+        # Convert to distance in cm.
+        oldY = -2 + (obX - 4) * 3
+        oldX = 2 + obY * 3
+        desiredY = -2 + (dbX - 4) * 3
+        desiredX = 2 + dbY * 3
+        print("Your desired move is from [", oldX, ", ", oldY, "] to [", desiredX, ", ", desiredY, "]-- ", sep="")
 
-            # Movements!
-            # Move the arm down, grab piece from previous desired position.
-            push(ser, 1, thetaOne, 180, thetaTwo, 0)
+        # Calculate angles for the move. Sorry about the confusing names...
+        [thetaOne, thetaTwo] = inverseKinematics(oldX, oldY)
+        [thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
+        print("The generated angles are [", thetaOne, ", ", thetaTwo, "] to [", thetaEen, ", ", thetaTwee, "]-- ", sep="")
 
-            # Raise the arm with the piece.
-            push(ser, 2, thetaOne, 140, thetaTwo, 0)
+        # Movements!
+        # Move the arm down, grab piece from previous desired position.
+        push(ser, 1, thetaOne, 180, thetaTwo, 0)
 
-            # Lower arm and drop piece in new desired postition.
-            
-            push(ser, 3, thetaEen, 170, thetaTwee, 1)
+        # Raise the arm with the piece.
+        push(ser, 2, thetaOne, 140, thetaTwo, 0)
 
-            # Raise arm without the piece, restart magnetism.
-            push(ser, 4, thetaEen, 0, thetaTwee, 0)
+        # Lower arm and drop piece in new desired postition.
 
-    # Microcontroller dependency that is superfluous anyway.
-    #ser.close #closes serial port
+        push(ser, 3, thetaEen, 170, thetaTwee, 1)
+
+        # Raise arm without the piece, restart magnetism.
+        push(ser, 4, thetaEen, 0, thetaTwee, 0)
+        
+    # Closes serial port.
+    ser.close() 
 
 
 def readJson():
