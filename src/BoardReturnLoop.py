@@ -5,6 +5,7 @@ import json
 import time
 import math as math
 
+
 def main():
 	start = int(round(time.time() * 1000))
 
