@@ -28,7 +28,7 @@ import math
 import json
 
 
-def moveCheck():
+def moveCheck(ser):
     val = ""
     # Start loop...
     while 1:
@@ -58,6 +58,18 @@ def moveCheck():
 
 # Input: x and y board positions
 def inverseKinematics(xB, yB):
+
+	# Actuator length constants.
+	LENGTHONE = 17  # Length of the z-axis actuator.
+	LENGTHTWO = 10.5  # Length of the shortest actuator.
+
+	# Actuator yam coordinates for desired endpoint calculation.
+	ARMPOSITIONX = 12
+	ARMPOSITIONY = -6
+
+	#print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
+	#print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
+
     x = xB  # abs(xB)# - ARMPOSITIONX)
     y = yB  # abs(yB)# - ARMPOSITIONY)
 
@@ -126,7 +138,7 @@ def inverseKinematics(xB, yB):
 #
 #   MODE 1: Teminal Mode (for developement purposes)
 # ==================================================
-def terminalMode():
+def terminalMode(ser):
     val = input("Please input 1', 2', 3' and Magnet state:  ")
 
     while (val != "terminate"):
@@ -139,7 +151,7 @@ def terminalMode():
         #    print("pain is love")
 
         # Checking while condition...
-        moveCheck();
+        moveCheck(ser);
         val = input("Please input 1', 2', 3' and Magnet state:  ")
     ser.close  # closes serial port
 
@@ -147,28 +159,26 @@ def terminalMode():
 #
 #   MODE 2: Automatic Mode
 # ==================================================
-def push(movement, t1, t2, t3, m):
+def push(ser, movement, t1, t2, t3, m):
     val = str(t1) + "," + str(t2) + "," + str(t3) + "," + str(m)
     val = val + "\n"
     ser.write(val.encode()) # YYY microcontroller dependency.
     print("Movement ", movement, ":  ", val, sep="")
-    moveCheck() # YYY microcontroller dependency.
+    moveCheck(ser) # YYY microcontroller dependency.
 
 
 def automaticMode():
-
+    
     while 1:
         # pause = input("press enter continue")
         move = readJson()
-        positions = readJJava()
         if move == 'allowed to move':
 
-        # Starting board position (read dis).
-        #  positions = [xOld, xNew, yOld, yNew]
-			obX = positions[0]
-			obY = positions[2]
-			dbX = positions[1]
-			dbY = positions[3]
+            # Starting board position (read dis).
+			obX =
+			obY = 
+			dbX = 
+			dbY = 
 
 			# Convert to distance in cm.
 			oldY = -2 + (obX - 4) * 3
@@ -184,17 +194,17 @@ def automaticMode():
 
 			# Movements!
             # Move the arm down, grab piece from previous desired position.
-            push(1, thetaOne, 180, thetaTwo, 0)
+            push(ser, 1, thetaOne, 180, thetaTwo, 0)
 
             # Raise the arm with the piece.
-            push(2, thetaOne, 140, thetaTwo, 0)
+            push(ser, 2, thetaOne, 140, thetaTwo, 0)
 
             # Lower arm and drop piece in new desired postition.
-
-            push(3, thetaEen, 170, thetaTwee, 1)
+            
+            push(ser, 3, thetaEen, 170, thetaTwee, 1)
 
             # Raise arm without the piece, restart magnetism.
-            push(4, thetaEen, 0, thetaTwee, 0)
+            push(ser, 4, thetaEen, 0, thetaTwee, 0)
 
 	# Microcontroller dependency that is superfluous anyway.
     #ser.close #closes serial port
@@ -225,17 +235,7 @@ def readJJava():
 # ==================================================
 
 def main():
-	# Actuator length constants.
-	LENGTHONE = 17  # Length of the z-axis actuator.
-	LENGTHTWO = 10.5  # Length of the shortest actuator.
-
-	# Actuator yam coordinates for desired endpoint calculation.
-	ARMPOSITIONX = 12
-	ARMPOSITIONY = -6
-
-	print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
-	print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
-
+	
 	baudRate = 9600
 	serPort = "/dev/ttyACM0"
 	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
@@ -243,4 +243,4 @@ def main():
 	startMarker = 60
 	endMarker = 62
 
-	automaticMode()
+	automaticMode(ser)
