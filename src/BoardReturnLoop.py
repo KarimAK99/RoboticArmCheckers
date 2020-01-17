@@ -20,8 +20,8 @@ start = int(round(time.time() * 1000))
 #img_hsv = cv2.imread('img2.jpg')
 
 
-img = cv2.imread('newroomr.jpg')
-img_hsv = cv2.imread('newroomr.jpg')
+img = cv2.imread('queentest.jpg')
+img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 #detect top left corner
 hsvY = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -35,7 +35,9 @@ avgY = np.mean(pointsY, axis=0)
 yellowX = int(avgY[0][0])
 yellowY = int(avgY[0][1])
 #print(yellowX)
-#print(yellowY)
+#print(yellowY),
+
+
 
 #detect bottom right corner
 hsvP = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -75,14 +77,24 @@ img = cv2.medianBlur(img,5)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 circles = cv2.HoughCircles(gray,cv2.HOUGH_GRADIENT,1,20,param1=50,param2=35,minRadius=25,maxRadius=50)
 
+#detect red for queen finding
+lower_range1R = np.array([0,75,150])
+upper_range1R = np.array([10,200,255])
+lower_range2R = np.array([140,75,150])
+upper_range2R = np.array([179,200,255])
+mask1R = cv2.inRange(img_hsv, lower_range1R, upper_range1R)
+mask2R = cv2.inRange(img_hsv, lower_range2R, upper_range2R)
+maskR = mask1R | mask2R
+
 circles = np.uint16(np.around(circles))
 circle_color = list()
 #for circles in list draw and check if b or w
 for i in circles[0,:]:
+    #print("next piece")
     # draw the outer circle
-    cv2.circle(img_hsv,(i[0],i[1]),i[2],(0,255,0),2)
+    cv2.circle(img,(i[0],i[1]),i[2],(0,255,0),2)
     # draw the center of the circle
-    cv2.circle(img_hsv,(i[0],i[1]),2,(0,0,255),3)
+    cv2.circle(img,(i[0],i[1]),2,(0,0,255),3)
     h, w = gray.shape
     mask = np.zeros((h,w), np.uint8)
     cv2.circle(mask, (i[0], i[1]), i[2], (255, 255, 255), thickness=-1)
@@ -95,10 +107,12 @@ for i in circles[0,:]:
     #print(w)
     #print(h)
     crop = masked_data[y:y+h,x:x+w]
+    cv2.imshow('crop', crop)
     #print(i[0])
     #print(i[1])
     #print(i[2])
     #mean, _ = cv2.meanStdDev(crop)
+    queenCntr = 0
     blackCntr = 0
     whiteCntr = 0
     #print(img[i[1],i[0]])
@@ -114,6 +128,9 @@ for i in circles[0,:]:
                 #print(red)
                 mean = int((int(blue) + int(green) + int(red)) / 3)
                 #print(mean)
+                if(maskR[row, col] > 0):
+                    queenCntr = queenCntr + 1
+                    #print("queencntr++")
                 if(mean < 127.5):
                     #print("blackCntr++")
                     blackCntr = blackCntr + 1
@@ -124,12 +141,20 @@ for i in circles[0,:]:
                     #print(whiteCntr)
     #print(blackCntr)
     #print(whiteCntr)
-    if (blackCntr > whiteCntr):
-        #print('black')
-        circle_color.append((i[0], i[1], 1))
+    if (queenCntr > 20):
+        if (blackCntr > whiteCntr):
+            #print('black')
+            circle_color.append((i[0], i[1], 1, 1))
+        else:
+            #print('white')
+            circle_color.append((i[0], i[1], 2, 1))
     else:
-        #print('white')
-        circle_color.append((i[0], i[1], 2))
+        if (blackCntr > whiteCntr):
+            #print('black')
+            circle_color.append((i[0], i[1], 1, 0))
+        else:
+            #print('white')
+            circle_color.append((i[0], i[1], 2, 0))
 #print output
 #print(circle_color)
 #convert pixel coords to board coords
@@ -148,7 +173,7 @@ for c in circle_color:
     for y in range(1,9):
         if((c[1] < y * square_h) & (c[1] > (y-1) * square_h)):
             y_pos = y
-    circle_position.append((c[2], x_pos - 1, y_pos - 1))
+    circle_position.append((c[2], c[3], x_pos - 1, y_pos - 1))
 #output final list with colours and board coordinates
 #output format = (colour, X, Y)
 #where colour=1 -> black, colour=2 -> white
@@ -167,7 +192,8 @@ end = milli_sec = int(round(time.time() * 1000))
 duration = end - start
 print(duration)
 
-cv2.imshow('detected circles',img_hsv)
+cv2.imshow('detected circles',img)
+cv2.imshow('detected red',maskR)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
