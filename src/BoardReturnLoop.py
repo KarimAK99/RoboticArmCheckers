@@ -175,7 +175,7 @@ def main():
 		for y in range(1,9):
 			if((c[1] < y * square_h) & (c[1] > (y-1) * square_h)):
 				y_pos = y
-		circle_position.append((c[2], c[3], x_pos - 1, y_pos - 1))
+		circle_position.append((c[2], x_pos - 1, y_pos - 1, c[3]))
 	#output final list with colours and board coordinates
 	#output format = (colour, X, Y)
 	#where colour=1 -> black, colour=2 -> white
