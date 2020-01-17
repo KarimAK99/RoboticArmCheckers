@@ -26,7 +26,7 @@ while 1:
 	motion_vision.motion_color()
 
 	# Begin moving
-	#sercom.main()
+	sercom.main()
 
 	# Repeat loop...
 	print("Python loop complete, will repeat after a second delay!-- ")

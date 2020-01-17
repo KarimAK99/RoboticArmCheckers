@@ -23,6 +23,7 @@
 #   IMPORTS
 # ==================================================
 import serial
+from serial import Serial
 import time
 import math
 import json
@@ -238,7 +239,7 @@ def readJJava():
 def main():
 
     baudRate = 9600
-    serPort = "/dev/ttyACM0"
+    serPort = '/dev/ttyACM11'
     ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
     print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
     startMarker = 60

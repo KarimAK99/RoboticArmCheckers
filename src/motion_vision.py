@@ -101,11 +101,11 @@ def motion_color():
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
         eend = int(round(time.time() * 1000))
-        if eend - staart > 10000:
-             break
-        print(get_blue())
-        print(get_move())
-        print(get_robot_state())
+        if eend - staart > 1000:
+            break
+        # print(get_blue())
+        # print(get_move())
+        # print(get_robot_state())
         write_data()
         read_data()
 
