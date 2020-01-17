@@ -109,7 +109,7 @@ def main():
 		#print(w)
 		#print(h)
 		crop = masked_data[y:y+h,x:x+w]
-		cv2.imshow('crop', crop)
+		#cv2.imshow('crop', crop)
 		#print(i[0])
 		#print(i[1])
 		#print(i[2])
