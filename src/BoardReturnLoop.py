@@ -7,21 +7,21 @@ import math as math
 
 start = int(round(time.time() * 1000))
 
-#cam = cv2.VideoCapture(1,cv2.CAP_DSHOW)
-#cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-#cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-#retval, frame = cam.read()
-#if retval != True:
-##    #replace this by popup window
-#    raise ValueError("Can't read frame. Check if webcam is connected !!")
-#cv2.imwrite('img2.jpg', frame)
-##cv2.imshow("img1", frame)
-#img = cv2.imread('img2.jpg')
-#img_hsv = cv2.imread('img2.jpg')
+cam = cv2.VideoCapture(1,cv2.CAP_DSHOW)
+cam.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cam.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+retval, frame = cam.read()
+if retval != True:
+#    #replace this by popup window
+    raise ValueError("Can't read frame. Check if webcam is connected !!")
+cv2.imwrite('img2.jpg', frame)
+#cv2.imshow("img1", frame)
+img = cv2.imread('img2.jpg')
+img_hsv = cv2.imread('img2.jpg')
 
 
-img = cv2.imread('queentest.jpg')
-img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+#img = cv2.imread('queentest.jpg')
+#img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 #detect top left corner
 hsvY = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -192,8 +192,8 @@ end = milli_sec = int(round(time.time() * 1000))
 duration = end - start
 print(duration)
 
-cv2.imshow('detected circles',img)
-cv2.imshow('detected red',maskR)
-cv2.waitKey(0)
+#cv2.imshow('detected circles',img)
+#cv2.imshow('detected red',maskR)
+#cv2.waitKey(0)
 cv2.destroyAllWindows()
 
