@@ -59,16 +59,16 @@ def moveCheck(ser):
 # Input: x and y board positions
 def inverseKinematics(xB, yB):
 
-	# Actuator length constants.
-	LENGTHONE = 17  # Length of the z-axis actuator.
-	LENGTHTWO = 10.5  # Length of the shortest actuator.
+    # Actuator length constants.
+    LENGTHONE = 17  # Length of the z-axis actuator.
+    LENGTHTWO = 10.5  # Length of the shortest actuator.
 
-	# Actuator yam coordinates for desired endpoint calculation.
-	ARMPOSITIONX = 12
-	ARMPOSITIONY = -6
+    # Actuator yam coordinates for desired endpoint calculation.
+    ARMPOSITIONX = 12
+    ARMPOSITIONY = -6
 
-	#print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
-	#print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
+    #print("Actuator lengths are [1,2]:[", LENGTHONE, ",", LENGTHTWO, "]", sep="")
+    #print("Arm positions are registerd as [x, y]:[", ARMPOSITIONX, ", ", ARMPOSITIONY, "]", sep="")
 
     x = xB  # abs(xB)# - ARMPOSITIONX)
     y = yB  # abs(yB)# - ARMPOSITIONY)
@@ -167,32 +167,32 @@ def push(ser, movement, t1, t2, t3, m):
     moveCheck(ser) # YYY microcontroller dependency.
 
 
-def automaticMode():
+def automaticMode(ser):
     
     while 1:
         # pause = input("press enter continue")
         move = readJson()
         if move == 'allowed to move':
-
+            position = readJJava()
             # Starting board position (read dis).
-			obX =
-			obY = 
-			dbX = 
-			dbY = 
+            obX = position[0]
+            obY = position[2]
+            dbX = position[1]
+            dbY = position[3]
 
-			# Convert to distance in cm.
-			oldY = -2 + (obX - 4) * 3
-			oldX = 2 + obY * 3
-			desiredY = -2 + (dbX - 4) * 3
-			desiredX = 2 + dbY * 3
-			print("Your desired move is from [", oldX, ", ", oldY, "] to [", desiredX, ", ", desiredY, "]-- ", sep="")
+            # Convert to distance in cm.
+            oldY = -2 + (obX - 4) * 3
+            oldX = 2 + obY * 3
+            desiredY = -2 + (dbX - 4) * 3
+            desiredX = 2 + dbY * 3
+            print("Your desired move is from [", oldX, ", ", oldY, "] to [", desiredX, ", ", desiredY, "]-- ", sep="")
 
-			# Calculate angles for the move. Sorry about the confusing names...
-			[thetaOne, thetaTwo] = inverseKinematics(oldX, oldY)
-			[thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
-			print("The generated angles are [", thetaOne, ", ", thetaTwo, "] to [", thetaEen, ", ", thetaTwee, "]-- ", sep="")
+            # Calculate angles for the move. Sorry about the confusing names...
+            [thetaOne, thetaTwo] = inverseKinematics(oldX, oldY)
+            [thetaEen, thetaTwee] = inverseKinematics(desiredX, desiredY)
+            print("The generated angles are [", thetaOne, ", ", thetaTwo, "] to [", thetaEen, ", ", thetaTwee, "]-- ", sep="")
 
-			# Movements!
+            # Movements!
             # Move the arm down, grab piece from previous desired position.
             push(ser, 1, thetaOne, 180, thetaTwo, 0)
 
@@ -206,7 +206,7 @@ def automaticMode():
             # Raise arm without the piece, restart magnetism.
             push(ser, 4, thetaEen, 0, thetaTwee, 0)
 
-	# Microcontroller dependency that is superfluous anyway.
+    # Microcontroller dependency that is superfluous anyway.
     #ser.close #closes serial port
 
 
@@ -235,12 +235,12 @@ def readJJava():
 # ==================================================
 
 def main():
-	
-	baudRate = 9600
-	serPort = "/dev/ttyACM0"
-	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
-	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-	startMarker = 60
-	endMarker = 62
 
-	automaticMode(ser)
+    baudRate = 9600
+    serPort = "/dev/ttyACM0"
+    ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+    print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+    startMarker = 60
+    endMarker = 62
+
+    automaticMode(ser)

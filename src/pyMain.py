@@ -17,6 +17,7 @@ import sercom
 
 # Initiate loop.
 print("Entering python main loop-- ")
+motion_vision.motion_color()
 while 1:
 	# Detect the board positions
 	BoardReturnLoop.main()
@@ -25,7 +26,7 @@ while 1:
 	motion_vision.motion_color()
 
 	# Begin moving
-	sercom.main()
+	#sercom.main()
 
 	# Repeat loop...
 	print("Python loop complete, will repeat after a second delay!-- ")
