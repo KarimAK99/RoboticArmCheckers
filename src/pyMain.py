@@ -17,7 +17,7 @@ import sercom
 
 # Initiate loop.
 print("Entering python main loop-- ")
-motion_vision.motion_color()
+
 while 1:
 	# Detect the board positions
 	BoardReturnLoop.main()

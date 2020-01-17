@@ -13,6 +13,7 @@ public class Communicator {
 	static int[] color;
 	static int[]xPos;
 	static int[]yPos;
+	static int[]queen;
 	static int x1;
 	static int x2;
 	static int y1;
@@ -54,11 +55,12 @@ public class Communicator {
 		x2 =7 ;
 		y1 = 2;
 		y2 = 3;
-		writeToJSON();
+		//writeToJSON();
 		readFromJSON();
 		System.out.println(Arrays.toString(color));
 		System.out.println(Arrays.toString(xPos));
 		System.out.println(Arrays.toString(yPos));
+		System.out.println(Arrays.toString(queen));
 
 	}
 
@@ -425,16 +427,19 @@ public class Communicator {
 			arr[i] = Integer.parseInt(items[i]);
 		}
 		//3 arrays with all the data, color = player, xpos= x- position, ypos = y- position
-		color = new int[size/3];
-		xPos = new int[size/3];
-		yPos = new int[size/3];
-		int j =0; int x =1; int y = 2;
+		color = new int[size/4];
+		xPos = new int[size/4];
+		yPos = new int[size/4];
+		queen = new int[size/4];
+		int j =0; int x =1; int y = 2; int w=3;
 		for(int i = 0; i< color.length;i++){
 			color[i]= arr[j];
 			xPos[i]=arr[x];
 			yPos[i] = arr[y];
-			j+=3; x+=3; y+=3;
+			queen[i] = arr[w];
+			j+=4; x+=4; y+=4; w+=4;
 		}
+
 	}
 }
 

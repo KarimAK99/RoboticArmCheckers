@@ -1,5 +1,4 @@
 from imutils.video import VideoStream
-import argparse
 from time import sleep
 import imutils
 import time
@@ -17,6 +16,7 @@ def motion_color():
     # vs = VideoStream(src=0).start()  # laptop camera
     vs = VideoStream(src=1).start()  # robot camera
     sleep(2.0)
+    staart = int(round(time.time() * 1000))
     minArea = 2500
     firstFrame = None
     global movingState
@@ -49,7 +49,6 @@ def motion_color():
         # compute the absolute difference between the current frame and first frame
         frameDelta = cv2.absdiff(firstFrame, gray)
         thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
-
 
         # dilate the thresholded image to fill in holes, then find contours
         thresh = cv2.dilate(thresh, None, iterations=2)
@@ -85,8 +84,8 @@ def motion_color():
 
         # show the frame and record if the user presses a key
         cv2.imshow("move Feed", frame)
-        #cv2.imshow("Thresh", thresh)
-        #cv2.imshow("Frame Delta", frameDelta)
+        # cv2.imshow("Thresh", thresh)
+        # cv2.imshow("Frame Delta", frameDelta)
         cv2.imshow("colors", colors)
 
         # get the states of who is playing
@@ -101,6 +100,9 @@ def motion_color():
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
+        eend = int(round(time.time() * 1000))
+        if eend - staart > 10000:
+             break
         print(get_blue())
         print(get_move())
         print(get_robot_state())
@@ -140,5 +142,5 @@ def read_data():
             print('state: ' + d['move'])
 
 
-# if __name__ == '__main__':
-    #  motion_color()
+if __name__ == '__main__':
+    motion_color()
