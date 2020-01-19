@@ -243,10 +243,10 @@ def readJJava():
 def main():
     baudRate = 9600
     #serPort = "/dev/ttyACM0" # Portname on Olive's laptop, can be find in bottom right corner of arduino.
-	serPort = '/dev/ttyCOM11'
-	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
-	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-	startMarker = 60
-	endMarker = 62
+    serPort = '/dev/ttyCOM11'
+    ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+    print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+    startMarker = 60
+    endMarker = 62
     
     automaticMode(ser)
