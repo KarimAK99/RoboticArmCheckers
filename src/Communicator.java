@@ -55,7 +55,7 @@ public class Communicator {
 		x2 =7 ;
 		y1 = 2;
 		y2 = 3;
-		//writeToJSON();
+		writeToJSON();
 		readFromJSON();
 		System.out.println(Arrays.toString(color));
 		System.out.println(Arrays.toString(xPos));

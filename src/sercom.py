@@ -154,7 +154,7 @@ def terminalMode(ser):
         # Checking while condition...
         moveCheck(ser);
         val = input("Please input 1', 2', 3' and Magnet state:  ")
-    ser.close  # closes serial port
+    # ser.close  # closes serial port
 
 
 #
@@ -236,13 +236,3 @@ def readJJava():
 #   START CODE
 # ==================================================
 
-def main():
-
-    baudRate = 9600
-    serPort = '/dev/ttyACM11'
-    ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
-    print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-    startMarker = 60
-    endMarker = 62
-
-    automaticMode(ser)
