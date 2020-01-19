@@ -11,6 +11,16 @@
 import time
 import serial
 
+def serStart():
+	baudRate = 9600
+	serPort = '/dev/ttyCOM11'
+	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+	startMarker = 60
+	endMarker = 62
+	
+	return ser
+
 # Import the files to be called.
 import BoardReturnLoop
 import motion_vision
@@ -18,26 +28,22 @@ import sercom
 
 
 # Initiate loop.
+#ser = serStart() # ZZZ
 print("Entering python main loop-- ")
-baudRate = 9600
-serPort = '/dev/ttyCOM11'
-ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
-print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-startMarker = 60
-endMarker = 62
 while 1:
-	# Detect the board positions
+	# Detect the board positions.
 	BoardReturnLoop.main()
 
-	# Detect if there is obstruction
+	# Detect if there is obstruction.
 	motion_vision.motion_color()
 
-	# Begin moving
-	sercom.automaticMode(ser)
+	# Begin moving.
+	sercom.main() # ZZZ
+	#sercom.automaticMode(ser)
 
 	# Repeat loop...
 	print("Python loop complete, will repeat after a second delay!-- ")
 	time.sleep(1)
 
 # Initiate termination.
-# this is empty because we should never reach this part...
+#ser.close() # ZZZ
