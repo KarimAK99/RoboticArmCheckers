@@ -181,7 +181,11 @@ def automaticMode(ser):
         obY = position[2]
         dbX = position[1]
         dbY = position[3]
-
+        
+        # Adjust the y plane to match the other code.
+        #obY = 8 - obY
+        #dbY = 8 - dbY
+        
         # Convert to distance in cm.
         oldY = -2 + (obX - 4) * 3
         oldX = 2 + obY * 3
@@ -209,7 +213,7 @@ def automaticMode(ser):
         push(ser, 4, thetaEen, 0, thetaTwee, 0)
         
     # Closes serial port.
-    ser.close() 
+    ser.close() # ZZZ comment out if calling automaticMode(ser) instead of main() from pyMain.py 
 
 
 def readJson():
@@ -236,3 +240,13 @@ def readJJava():
 #   START CODE
 # ==================================================
 
+def main():
+    baudRate = 9600
+    #serPort = "/dev/ttyACM0" # Portname on Olive's laptop, can be find in bottom right corner of arduino.
+	serPort = '/dev/ttyCOM11'
+	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+	startMarker = 60
+	endMarker = 62
+    
+    automaticMode(ser)
