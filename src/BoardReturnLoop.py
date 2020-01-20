@@ -76,12 +76,12 @@ def main():
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=35, minRadius=25, maxRadius=50)
 
     # detect red for queen finding
-    lower_range1R = np.array([0, 75, 150])
-    upper_range1R = np.array([10, 200, 255])
-    lower_range2R = np.array([140, 75, 150])
-    upper_range2R = np.array([179, 200, 255])
-    mask1R = cv2.inRange(img_hsv, lower_range1R, upper_range1R)
-    mask2R = cv2.inRange(img_hsv, lower_range2R, upper_range2R)
+    lower_range1R = np.array([0, 75, 100])
+    upper_range1R = np.array([15, 225, 255])
+    lower_range2R = np.array([130, 75, 100])
+    upper_range2R = np.array([179, 225, 255])
+    mask1R = cv2.inRange(hsv, lower_range1R, upper_range1R)
+    mask2R = cv2.inRange(hsv, lower_range2R, upper_range2R)
     maskR = mask1R | mask2R
 
     circles = np.uint16(np.around(circles))
@@ -191,6 +191,8 @@ def main():
     print(duration)
 
     cv2.imshow('detected circles', img)
+    cv2.imshow('detected red1', mask1R)
+    cv2.imshow('detected red2', mask2R)
     cv2.imshow('detected red', maskR)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
