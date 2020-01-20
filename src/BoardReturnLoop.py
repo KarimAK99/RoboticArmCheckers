@@ -139,7 +139,8 @@ def main():
                     # print(whiteCntr)
         # print(blackCntr)
         # print(whiteCntr)
-        if (queenCntr > 20):
+        # print(queenCntr)
+        if (queenCntr > 200):
             if (blackCntr > whiteCntr):
                 # print('black')
                 circle_color.append((i[0], i[1], 1, 1))
