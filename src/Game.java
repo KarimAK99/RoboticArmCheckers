@@ -289,7 +289,7 @@ public class Game {
 					
 					if(AllTiles.get(leftup).isOccupied()) {
 					
-						if(!(AllTiles.get(leftup).getStatus().equals(AllTiles.get(location).getStatus()))) {
+						if((AllTiles.get(leftup).isOccupied())) {
 						
 							if(jumpleftup != -2) {
 							
@@ -313,7 +313,7 @@ public class Game {
 					
 					if(AllTiles.get(rightup).isOccupied()) {
 					
-						if(!(AllTiles.get(rightup).getStatus().equals(AllTiles.get(location).getStatus()))) {
+						if(AllTiles.get(rightup).isOccupied()) {
 						
 							if(jumprightup != -2) {
 							
@@ -337,7 +337,7 @@ public class Game {
 		
 					if(AllTiles.get(leftdown).isOccupied()) {
 		
-						if(!(AllTiles.get(leftdown).getStatus().equals(AllTiles.get(location).getStatus()))) {
+						if(AllTiles.get(leftdown).isOccupied()) {
 			
 							if(jumpleftdown != -2) {
 					
@@ -361,7 +361,7 @@ public class Game {
 		
 					if(AllTiles.get(rightdown).isOccupied()) {
 		
-						if(!(AllTiles.get(rightdown).getStatus().equals(AllTiles.get(location).getStatus()))) {
+						if(AllTiles.get(rightdown).isOccupied()) {
 			
 							if(jumprightdown != -2) {
 				
@@ -444,9 +444,6 @@ public class Game {
 			playerMoves = pMoves.size();
 			
 		}
-		
-		System.out.println("Robot Pieces: " + robotPieces + " Player Pieces: " + playerPieces + " Robot Protected: " + robotProtected + " Player Protected: " + playerProtected + " Robot Kings: " + robotKings
-				+ " Player Kings: " + playerKings + " Robot Moves: " + robotMoves + " Player Moves: " + playerMoves);
 		
 		if(player == 1) {
 			
@@ -568,22 +565,6 @@ public class Game {
  	public Move easyAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player) {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
- 		
-		for(int i = 0; i < AllTiles.size(); i++) {
-			
-			AllTiles.add(new Tiles(AllTiles.get(i)));
-			AllTiles.get(i).setStatus(AllTiles.get(i).getStatus());
-		}
-		
-		for(int i = 0; i < RobotPieces.size(); i++) {
-			
-			RobotPieces.add(new Pieces(RobotPieces.get(i)));
-		}
-		
-		for(int i = 0; i < PlayerPieces.size(); i++) {
-			
-			PlayerPieces.add(new Pieces(PlayerPieces.get(i)));
-		}
 		
 		ArrayList<Tiles> AT = AllTiles;
 		ArrayList<Pieces> RP = RobotPieces;
@@ -692,22 +673,7 @@ public class Game {
  	public Move mediumAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player) {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
- 		
-		for(int i = 0; i < AllTiles.size(); i++) {
-			
-			AllTiles.add(new Tiles(AllTiles.get(i)));
-			AllTiles.get(i).setStatus(AllTiles.get(i).getStatus());
-		}
-		
-		for(int i = 0; i < RobotPieces.size(); i++) {
-			
-			RobotPieces.add(new Pieces(RobotPieces.get(i)));
-		}
-		
-		for(int i = 0; i < PlayerPieces.size(); i++) {
-			
-			PlayerPieces.add(new Pieces(PlayerPieces.get(i)));
-		}
+ 		System.out.println("MOVES: " + moves.size());
 		
 		ArrayList<Tiles> AT = AllTiles;
 		ArrayList<Pieces> RP = RobotPieces;
@@ -786,22 +752,6 @@ public class Game {
  	public Move hardAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player) {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
- 		
-		for(int i = 0; i < AllTiles.size(); i++) {
-			
-			AllTiles.add(new Tiles(AllTiles.get(i)));
-			AllTiles.get(i).setStatus(AllTiles.get(i).getStatus());
-		}
-		
-		for(int i = 0; i < RobotPieces.size(); i++) {
-			
-			RobotPieces.add(new Pieces(RobotPieces.get(i)));
-		}
-		
-		for(int i = 0; i < PlayerPieces.size(); i++) {
-			
-			PlayerPieces.add(new Pieces(PlayerPieces.get(i)));
-		}
 		
 		ArrayList<Tiles> AT = AllTiles;
 		ArrayList<Pieces> RP = RobotPieces;
