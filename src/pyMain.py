@@ -19,7 +19,7 @@ import serial
 
 def serStart():
 	baudRate = 9600
-	serPort = '/dev/ttyCOM11'
+	serPort = 'COM3'
 	ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
 	print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
 	startMarker = 60
@@ -38,7 +38,7 @@ while 1:
 
 	# Detect if there is obstruction.
 	motion_vision.motion_color()
-	subprocess.call('java', '-jar', 'src/RoboticArmCheckers1.jar')
+	subprocess.call(['java', '-jar', 'RoboticArmCheckers1.jar'])
 
 	# Begin moving.
 	#sercom.main() # ZZZ
