@@ -7,6 +7,12 @@
 #	- files must be in the same directory as this main class (package handling hasn't been implemented)
 
 
+# Import the files to be called.
+import BoardReturnLoop
+import motion_vision
+import sercom
+import subprocess
+
 # Initial set-up code.
 import time
 import serial
@@ -21,10 +27,6 @@ def serStart():
 	
 	return ser
 
-# Import the files to be called.
-import BoardReturnLoop
-import motion_vision
-import sercom
 
 
 # Initiate loop.
@@ -36,10 +38,12 @@ while 1:
 
 	# Detect if there is obstruction.
 	motion_vision.motion_color()
+	subprocess.call('java', '-jar', 'src/RoboticArmCheckers1.jar')
 
 	# Begin moving.
-	sercom.main() # ZZZ
-	#sercom.automaticMode(ser)
+	#sercom.main() # ZZZ
+	ser = serStart()
+	sercom.automaticMode(ser)
 
 	# Repeat loop...
 	print("Python loop complete, will repeat after a second delay!-- ")

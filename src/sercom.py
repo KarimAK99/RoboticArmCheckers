@@ -240,7 +240,7 @@ def readJJava():
 #   START CODE
 # ==================================================
 
-def main():
+'''def main():
     baudRate = 9600
     #serPort = "/dev/ttyACM0" # Portname on Olive's laptop, can be find in bottom right corner of arduino.
     serPort = '/dev/ttyCOM11'
@@ -249,4 +249,5 @@ def main():
     startMarker = 60
     endMarker = 62
     
-    automaticMode(ser)
+    automaticMode(ser)'''
+    
