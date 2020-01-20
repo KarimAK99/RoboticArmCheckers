@@ -1,7 +1,7 @@
 package gamesimulation;
-public class Move {
+public class SimMove {
 
-	public Move(int start, int end, boolean jump, int capture){
+	public SimMove(int start, int end, boolean jump, int capture){
 		
 		this.start = start;
 		this.end = end;

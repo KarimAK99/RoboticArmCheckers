@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+
 public class Game {
 	
 	public Game() {
@@ -13,7 +14,7 @@ public class Game {
 	public ArrayList<Pieces> RobotPieces = new ArrayList<Pieces>();
 	public ArrayList<Pieces> PlayerPieces = new ArrayList<Pieces>();
 	
-	public void updateGameState(ArrayList<Pieces> pieces) {
+	public void updateGameState(ArrayList<Pieces> allpieces2) {
 		
 		for(int i = 0; i < AllTiles.size(); i++) {
 			
@@ -23,26 +24,26 @@ public class Game {
 		RobotPieces.clear();
 		PlayerPieces.clear();
 		
-		for(int i = 0; i < pieces.size(); i++) {
+		for(int i = 0; i < allpieces2.size(); i++) {
 			
-			AllTiles.get(pieces.get(i).getLocation() - 1).setOccupied(true);
+			AllTiles.get(allpieces2.get(i).getLocation() - 1).setOccupied(true);
 			
-			if(pieces.get(i).isRobot()) {
+			if(allpieces2.get(i).isRobot()) {
 				
-				AllTiles.get(pieces.get(i).getLocation() - 1).setStatus("R");
-				RobotPieces.add(pieces.get(i));
+				AllTiles.get(allpieces2.get(i).getLocation() - 1).setStatus("R");
+				RobotPieces.add(allpieces2.get(i));
 				
-				if(pieces.get(i).isKing()) {
+				if(allpieces2.get(i).isKing()) {
 					
 					RobotPieces.get(RobotPieces.size() - 1).setKing(true);
 				}
 				
 			} else {
 				
-				AllTiles.get(pieces.get(i).getLocation() - 1).setStatus("P");
-				PlayerPieces.add(pieces.get(i));
+				AllTiles.get(allpieces2.get(i).getLocation() - 1).setStatus("P");
+				PlayerPieces.add(allpieces2.get(i));
 				
-				if(pieces.get(i).isKing()) {
+				if(allpieces2.get(i).isKing()) {
 					
 					PlayerPieces.get(PlayerPieces.size() - 1).setKing(true);
 				}
@@ -383,7 +384,7 @@ public class Game {
 		return allMoves;
 	}
 
-	private double calculateHeuristics(int player, double h1, double h2, double h3, double h4, double h5, double h6, double h7, double h8, ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces) {	
+	public double calculateHeuristics(int player, double h1, double h2, double h3, double h4, double h5, double h6, double h7, double h8, ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces) {	
 		
 		int robotPieces = RobotPieces.size();
 		int playerPieces = PlayerPieces.size();
@@ -608,7 +609,7 @@ public class Game {
 			
 			for(int i = 0; i < captures.size(); i++) {
 				
-				scores.add(playTempMove(captures.get(i), AT, RP, PP, player));
+				scores.add(playTempMove(captures.get(i), AT, RP, PP, player, false));
 			}
 
 			for(int i = 0; i < scores.size(); i++) {
@@ -648,7 +649,7 @@ public class Game {
 			
 			for(int i = 0; i < moves.size(); i++) {
 				
-				scores.add(playTempMove(moves.get(i), AT, RP, PP, player));
+				scores.add(playTempMove(moves.get(i), AT, RP, PP, player, false));
 			}
 			
 			double median = (best + worst)/2;
@@ -683,6 +684,7 @@ public class Game {
 		
 		double random = Math.random();
 		int move = (int)(random*allMoves.size());
+		allMoves.get(move).setScore(scores.get(move));
 		
 		return allMoves.get(move);
 	}
@@ -730,7 +732,7 @@ public class Game {
 			
 			for(int i = 0; i < captures.size(); i++) {
 				
-				scores.add(playTempMove(captures.get(i), AT, RP, PP, player));
+				scores.add(playTempMove(captures.get(i), AT, RP, PP, player, false));
 			}
 
 			for(int i = 0; i < scores.size(); i++) {
@@ -753,7 +755,7 @@ public class Game {
 			
 			for(int i = 0; i < moves.size(); i++) {
 				
-				scores.add(playTempMove(moves.get(i), AT, RP, PP, player));
+				scores.add(playTempMove(moves.get(i), AT, RP, PP, player, false));
 			}
 
 			for(int i = 0; i < scores.size(); i++) {
@@ -776,12 +778,222 @@ public class Game {
 		
 		double random = Math.random();
 		int move = (int)(random*bestMoves.size());
+		bestMoves.get(move).setScore(scores.get(move));
 		
 		return bestMoves.get(move);
 	}
  	
+ 	public Move hardAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player) {
+		
+ 		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
+ 		
+		for(int i = 0; i < AllTiles.size(); i++) {
+			
+			AllTiles.add(new Tiles(AllTiles.get(i)));
+			AllTiles.get(i).setStatus(AllTiles.get(i).getStatus());
+		}
+		
+		for(int i = 0; i < RobotPieces.size(); i++) {
+			
+			RobotPieces.add(new Pieces(RobotPieces.get(i)));
+		}
+		
+		for(int i = 0; i < PlayerPieces.size(); i++) {
+			
+			PlayerPieces.add(new Pieces(PlayerPieces.get(i)));
+		}
+		
+		ArrayList<Tiles> AT = AllTiles;
+		ArrayList<Pieces> RP = RobotPieces;
+		ArrayList<Pieces> PP = PlayerPieces;
+		
+		ArrayList<Double> scores = new ArrayList<Double>();
+				
+		double best = -1000;
+		
+		ArrayList<Move> captures = new ArrayList<Move>();
+		ArrayList<Move> bestMoves = new ArrayList<Move>();
+		
+		for(int i = 0; i < moves.size(); i++) {
+			
+			if(moves.get(i).getCapture() > -1) {
+				
+				captures.add(moves.get(i));
+			}
+		}
+		
+		if(captures.size()>0) {
+			
+			for(int i = 0; i < captures.size(); i++) {
+				
+				scores.add(playTempMove(captures.get(i), AT, RP, PP, player, true));
+			}
 
- 	public double playTempMove(Move move, ArrayList<Tiles> AT, ArrayList<Pieces> RP, ArrayList<Pieces> PP, int player) {
+			for(int i = 0; i < scores.size(); i++) {
+				
+				if(scores.get(i) >= best) {
+					
+					best = scores.get(i);
+				}
+			}
+			
+			for(int i = 0; i < scores.size(); i++) {
+				
+				if(scores.get(i) == best) {
+					
+					bestMoves.add(captures.get(i));
+				}
+			}
+			
+		} else {
+			
+			for(int i = 0; i < moves.size(); i++) {
+				
+				scores.add(playTempMove(moves.get(i), AT, RP, PP, player, true));
+			}
+
+			for(int i = 0; i < scores.size(); i++) {
+				
+				if(scores.get(i) >= best) {
+					
+					best = scores.get(i);
+				}
+			}
+			
+			for(int i = 0; i < scores.size(); i++) {
+				
+				if(scores.get(i) == best) {
+					
+					bestMoves.add(moves.get(i));
+				}
+			}
+					
+		}
+		
+		double random = Math.random();
+		int move = (int)(random*bestMoves.size());
+		bestMoves.get(move).setScore(scores.get(move));
+		
+		return bestMoves.get(move);
+	}
+ 	
+ 	private Move adaptiveAI(ArrayList<Move> moves, int player, double av) {
+ 			
+ 			ArrayList<Tiles> AT = AllTiles;
+ 			ArrayList<Pieces> RP = RobotPieces;
+ 			ArrayList<Pieces> PP = PlayerPieces;
+ 			
+ 			ArrayList<Double> scores = new ArrayList<Double>();
+ 					
+ 			double best = -100000;
+ 			double worst = 100000;
+ 			
+ 			ArrayList<Move> captures = new ArrayList<Move>();
+ 			ArrayList<Move> allMoves = new ArrayList<Move>();
+ 			
+ 			for(int i = 0; i < moves.size(); i++) {
+ 				
+ 				if(moves.get(i).getCapture() > -1) {
+ 					
+ 					captures.add(moves.get(i));
+ 				}
+ 			}
+ 			
+ 			if(captures.size()>0) {
+ 				
+ 				for(int i = 0; i < captures.size(); i++) {
+ 					
+ 					scores.add(playTempMove(captures.get(i), AT, RP, PP, player, true));
+ 				}
+
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(scores.get(i) >= best) {
+ 						
+ 						best = scores.get(i);
+ 					}
+ 					
+ 					if(scores.get(i) <= best) {
+ 						
+ 						worst = scores.get(i);
+ 					}
+ 				}
+ 				
+ 				double median = av;
+ 				double closest = 1000;
+ 				
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(Math.abs(scores.get(i) - median) <= closest) {
+ 						
+ 						closest = Math.abs(scores.get(i) - median);
+
+ 					}
+ 				}
+ 				
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(Math.abs(scores.get(i) - median) == closest) {
+ 						
+ 						allMoves.add(captures.get(i));
+ 					}
+ 				}
+ 				
+ 			} else {
+ 				
+ 				for(int i = 0; i < moves.size(); i++) {
+ 					
+ 					scores.add(playTempMove(moves.get(i), AT, RP, PP, player, true));
+ 				}
+ 				
+ 				double median = av;
+ 				double closest = 100000;
+ 				
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(Math.abs(scores.get(i) - median) <= closest) {
+ 						
+ 						closest = Math.abs(scores.get(i) - median);
+
+ 					}
+ 				}
+
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(Math.abs(scores.get(i) - median) == closest) {
+ 						
+ 						best = scores.get(i);
+ 					}
+ 				}
+ 				
+ 				for(int i = 0; i < scores.size(); i++) {
+ 					
+ 					if(scores.get(i) == best) {
+ 						
+ 						allMoves.add(moves.get(i));
+ 					}
+ 				}
+ 						
+ 			}
+ 			
+ 			double random = Math.random();
+ 			int move = (int)(random*allMoves.size());
+ 			
+ 			if(allMoves.size() == 0) {
+ 				
+ 				double ran = Math.random();
+ 				int mov = (int)(ran*moves.size());
+ 				moves.get(mov).setScore(best);
+ 				return moves.get(mov);
+ 			}
+ 			
+ 			allMoves.get(move).setScore(best);
+ 			return allMoves.get(move);
+ 		
+	}
+	
+
+ 	public double playTempMove(Move move, ArrayList<Tiles> AT, ArrayList<Pieces> RP, ArrayList<Pieces> PP, int player, boolean hard) {
 		
 		int start = move.getStart() - 1;
 		int end = move.getEnd() - 1;
@@ -869,8 +1081,11 @@ public class Game {
 		AT.get(start).setOccupied(false);
 		AT.get(end).setOccupied(true);
 		
-		return calculateHeuristics(player, 1, 1, 2, 1, 1.5, 1, 1, 1, AT, RP, PP);
-		
+		if(hard) {
+			return calculateHeuristics(player, 1, 1, 2, 1, 1.5, 1, 1, 1, AT, RP, PP);
+		} else {
+			return calculateHeuristics(player, 1, 1, 1, 1, 1, 1, 1, 1, AT, RP, PP);
+		}
 	}
  
 	public void printBoard(ArrayList<Tiles> AllTiles) {

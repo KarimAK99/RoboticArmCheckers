@@ -1,7 +1,7 @@
 package gamesimulation;
 import java.util.ArrayList;
 
-public class Game {
+public class SimGame {
 
 	public static void main(String args[]) {
 			
@@ -19,12 +19,12 @@ public class Game {
 		
 		while(counter < 1000) {
 			
-			Game g = new Game();
+			SimGame g = new SimGame();
 			g.createTiles();
 			g.createPieces();
 			// g.printBoard();
 			stop = current + 1000;
-			Move previousMove = new Move(0,0,false,0);
+			SimMove previousMove = new SimMove(0,0,false,0);
 			double average = 100;
 
 			ArrayList<Double> playerone = new ArrayList<Double>();
@@ -71,7 +71,7 @@ public class Game {
 				//	g.hasGameEnded();
 					
 					EasyAI m = new EasyAI(g.AllTiles, g.RobotPieces, g.PlayerPieces);
-					Move move = m.returnMove(g.findMoves(g.PlayerPieces), 2);
+					SimMove move = m.returnMove(g.findMoves(g.PlayerPieces), 2);
 					g.playMove(move);
 				//	randomAI p = new randomAI();
 				//	g.playMove(p.returnMove(g.findMoves(g.PlayerPieces)));
@@ -142,9 +142,9 @@ public class Game {
 	
 	private boolean gameEnded = false;
 	private ArrayList<Tiles> AllTiles = new ArrayList<Tiles>();
-	private ArrayList<Pieces> AllPieces = new ArrayList<Pieces>();
-	private ArrayList<Pieces> RobotPieces = new ArrayList<Pieces>();
-	private ArrayList<Pieces> PlayerPieces = new ArrayList<Pieces>();
+	private ArrayList<SimPieces> AllPieces = new ArrayList<SimPieces>();
+	private ArrayList<SimPieces> RobotPieces = new ArrayList<SimPieces>();
+	private ArrayList<SimPieces> PlayerPieces = new ArrayList<SimPieces>();
 	
 	private void createTiles(){
 		
@@ -220,31 +220,31 @@ public class Game {
 	
 	private void createPieces() {
 		
-		Pieces piece1 = new Pieces(true, false, 1);
-		Pieces piece2 = new Pieces(true, false, 2);
-		Pieces piece3 = new Pieces(true, false, 3);
-		Pieces piece4 = new Pieces(true, false, 4);
-		Pieces piece5 = new Pieces(true, false, 5);
-		Pieces piece6 = new Pieces(true, false, 6);
-		Pieces piece7 = new Pieces(true, false, 7);
-		Pieces piece8 = new Pieces(true, false, 8);
-		Pieces piece9 = new Pieces(true, false, 9);
-		Pieces piece10 = new Pieces(true, false, 10);
-		Pieces piece11 = new Pieces(true, false, 11);
-		Pieces piece12 = new Pieces(true, false, 12);
+		SimPieces piece1 = new SimPieces(true, false, 1);
+		SimPieces piece2 = new SimPieces(true, false, 2);
+		SimPieces piece3 = new SimPieces(true, false, 3);
+		SimPieces piece4 = new SimPieces(true, false, 4);
+		SimPieces piece5 = new SimPieces(true, false, 5);
+		SimPieces piece6 = new SimPieces(true, false, 6);
+		SimPieces piece7 = new SimPieces(true, false, 7);
+		SimPieces piece8 = new SimPieces(true, false, 8);
+		SimPieces piece9 = new SimPieces(true, false, 9);
+		SimPieces piece10 = new SimPieces(true, false, 10);
+		SimPieces piece11 = new SimPieces(true, false, 11);
+		SimPieces piece12 = new SimPieces(true, false, 12);
 		
-		Pieces piece13 = new Pieces(false, false, 21);
-		Pieces piece14 = new Pieces(false, false, 22);
-		Pieces piece15 = new Pieces(false, false, 23);
-		Pieces piece16 = new Pieces(false, false, 24);
-		Pieces piece17 = new Pieces(false, false, 25);
-		Pieces piece18 = new Pieces(false, false, 26);
-		Pieces piece19 = new Pieces(false, false, 27);
-		Pieces piece20 = new Pieces(false, false, 28);
-		Pieces piece21 = new Pieces(false, false, 29);
-		Pieces piece22 = new Pieces(false, false, 30);
-		Pieces piece23 = new Pieces(false, false, 31);
-		Pieces piece24 = new Pieces(false, false, 32);
+		SimPieces piece13 = new SimPieces(false, false, 21);
+		SimPieces piece14 = new SimPieces(false, false, 22);
+		SimPieces piece15 = new SimPieces(false, false, 23);
+		SimPieces piece16 = new SimPieces(false, false, 24);
+		SimPieces piece17 = new SimPieces(false, false, 25);
+		SimPieces piece18 = new SimPieces(false, false, 26);
+		SimPieces piece19 = new SimPieces(false, false, 27);
+		SimPieces piece20 = new SimPieces(false, false, 28);
+		SimPieces piece21 = new SimPieces(false, false, 29);
+		SimPieces piece22 = new SimPieces(false, false, 30);
+		SimPieces piece23 = new SimPieces(false, false, 31);
+		SimPieces piece24 = new SimPieces(false, false, 32);
 		
 		AllTiles.get(0).setOccupied(true);
 		AllTiles.get(1).setOccupied(true);
@@ -359,9 +359,9 @@ public class Game {
 		
 	}
 
-	private ArrayList<Move> findMoves(ArrayList<Pieces> pieces){
+	private ArrayList<SimMove> findMoves(ArrayList<SimPieces> pieces){
 		
-		ArrayList<Move> allMoves = new ArrayList<Move>();
+		ArrayList<SimMove> allMoves = new ArrayList<SimMove>();
 		
 		for(int i = 0; i < pieces.size(); i++) {
 			
@@ -387,14 +387,14 @@ public class Game {
 							
 								if(!(AllTiles.get(jumpleftup).isOccupied())){
 								
-									allMoves.add(new Move(location +1, jumpleftup +1, true, leftup+1));
+									allMoves.add(new SimMove(location +1, jumpleftup +1, true, leftup+1));
 								}
 							}
 						}
 						
 					} else {
 						
-						allMoves.add(new Move(location +1, leftup +1, false, -1));
+						allMoves.add(new SimMove(location +1, leftup +1, false, -1));
 					}
 				}
 			}
@@ -411,14 +411,14 @@ public class Game {
 							
 								if(!(AllTiles.get(jumprightup).isOccupied())){
 								
-									allMoves.add(new Move(location +1, jumprightup +1, true, rightup+1));
+									allMoves.add(new SimMove(location +1, jumprightup +1, true, rightup+1));
 								}
 							}
 						}
 						
 					} else {
 						
-						allMoves.add(new Move(location +1, rightup +1, false, -1));
+						allMoves.add(new SimMove(location +1, rightup +1, false, -1));
 					}
 				}
 			}
@@ -435,14 +435,14 @@ public class Game {
 					
 								if(!(AllTiles.get(jumpleftdown).isOccupied())){
 					
-									allMoves.add(new Move(location +1, jumpleftdown +1, true, leftdown+1));
+									allMoves.add(new SimMove(location +1, jumpleftdown +1, true, leftdown+1));
 								}
 							}
 						}
 			
 					} else {
 			
-						allMoves.add(new Move(location +1, leftdown +1, false, -1));
+						allMoves.add(new SimMove(location +1, leftdown +1, false, -1));
 					}
 				}	
 			}
@@ -459,14 +459,14 @@ public class Game {
 				
 								if(!(AllTiles.get(jumprightdown).isOccupied())){
 					
-									allMoves.add(new Move(location +1, jumprightdown +1, true, rightdown+1));
+									allMoves.add(new SimMove(location +1, jumprightdown +1, true, rightdown+1));
 								}
 							}
 						}
 			
 					} else {
 			
-						allMoves.add(new Move(location +1, rightdown +1, false, -1));
+						allMoves.add(new SimMove(location +1, rightdown +1, false, -1));
 					}
 				}
 			}
@@ -552,7 +552,7 @@ public class Game {
 	} */
 
 	
-	private void playMove(Move move) {
+	private void playMove(SimMove move) {
 		
 		int start = move.getStart() - 1;
 		int end = move.getEnd() - 1;
@@ -677,7 +677,7 @@ public class Game {
 		
 	}
 	
-	private void printMoves(ArrayList<Move> moves){
+	private void printMoves(ArrayList<SimMove> moves){
 		
 		System.out.println("");
 		

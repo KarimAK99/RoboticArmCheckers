@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class MediumAI {
 
-	public MediumAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces) {
+	public MediumAI(ArrayList<Tiles> AllTiles, ArrayList<SimPieces> RobotPieces, ArrayList<SimPieces> PlayerPieces) {
 		
 		for(int i = 0; i < AllTiles.size(); i++) {
 			
@@ -13,33 +13,33 @@ public class MediumAI {
 		
 		for(int i = 0; i < RobotPieces.size(); i++) {
 			
-			this.RobotPieces.add(new Pieces(RobotPieces.get(i)));
+			this.RobotPieces.add(new SimPieces(RobotPieces.get(i)));
 		}
 		
 		for(int i = 0; i < PlayerPieces.size(); i++) {
 			
-			this.PlayerPieces.add(new Pieces(PlayerPieces.get(i)));
+			this.PlayerPieces.add(new SimPieces(PlayerPieces.get(i)));
 		}
 		
 	}
 	
 	private ArrayList<Tiles> AllTiles = new ArrayList<Tiles>();
-	private ArrayList<Pieces> RobotPieces = new ArrayList<Pieces>();
-	private ArrayList<Pieces> PlayerPieces = new ArrayList<Pieces>();
+	private ArrayList<SimPieces> RobotPieces = new ArrayList<SimPieces>();
+	private ArrayList<SimPieces> PlayerPieces = new ArrayList<SimPieces>();
 	
-	public Move returnMove(ArrayList<Move> moves, int player) {
+	public SimMove returnMove(ArrayList<SimMove> moves, int player) {
 		
 		
 		ArrayList<Tiles> AT = AllTiles;
-		ArrayList<Pieces> RP = RobotPieces;
-		ArrayList<Pieces> PP = PlayerPieces;
+		ArrayList<SimPieces> RP = RobotPieces;
+		ArrayList<SimPieces> PP = PlayerPieces;
 		
 		ArrayList<Double> scores = new ArrayList<Double>();
 				
 		double best = -1000;
 		
-		ArrayList<Move> captures = new ArrayList<Move>();
-		ArrayList<Move> bestMoves = new ArrayList<Move>();
+		ArrayList<SimMove> captures = new ArrayList<SimMove>();
+		ArrayList<SimMove> bestMoves = new ArrayList<SimMove>();
 		
 		for(int i = 0; i < moves.size(); i++) {
 			
@@ -104,7 +104,7 @@ public class MediumAI {
 		return bestMoves.get(move);
 	}
 	
-	public double playTempMove(Move move, ArrayList<Tiles> AT, ArrayList<Pieces> RP, ArrayList<Pieces> PP, int player) {
+	public double playTempMove(SimMove move, ArrayList<Tiles> AT, ArrayList<SimPieces> RP, ArrayList<SimPieces> PP, int player) {
 		
 		int start = move.getStart() - 1;
 		int end = move.getEnd() - 1;
@@ -199,7 +199,7 @@ public class MediumAI {
 		}
 	}
 	
-	private double calculateHeuristics(int player, double h1, double h2, double h3, double h4, double h5, double h6, double h7, double h8, ArrayList<Tiles> AT, ArrayList<Pieces> RP, ArrayList<Pieces> PP) {	
+	private double calculateHeuristics(int player, double h1, double h2, double h3, double h4, double h5, double h6, double h7, double h8, ArrayList<Tiles> AT, ArrayList<SimPieces> RP, ArrayList<SimPieces> PP) {	
 		
 		int RPs = RP.size();
 		int PPs = PP.size();
@@ -231,7 +231,7 @@ public class MediumAI {
 				robotKings++;
 			}
 			
-			ArrayList<Move> rMoves = findMoves(RP, AT);
+			ArrayList<SimMove> rMoves = findMoves(RP, AT);
 			robotMoves = rMoves.size();
 			
 		}
@@ -255,7 +255,7 @@ public class MediumAI {
 				playerKings++;
 			}
 			
-			ArrayList<Move> pMoves = findMoves(PP, AT);
+			ArrayList<SimMove> pMoves = findMoves(PP, AT);
 			playerMoves = pMoves.size();
 			
 		}
@@ -271,9 +271,9 @@ public class MediumAI {
 		
 	}
 
-	private ArrayList<Move> findMoves(ArrayList<Pieces> pieces, ArrayList<Tiles> AT){
+	private ArrayList<SimMove> findMoves(ArrayList<SimPieces> pieces, ArrayList<Tiles> AT){
 		
-		ArrayList<Move> allMoves = new ArrayList<Move>();
+		ArrayList<SimMove> allMoves = new ArrayList<SimMove>();
 		
 		for(int i = 0; i < pieces.size(); i++) {
 			
@@ -299,14 +299,14 @@ public class MediumAI {
 							
 								if(!(AT.get(jumpleftup).isOccupied())){
 								
-									allMoves.add(new Move(location +1, jumpleftup +1, true, leftup+1));
+									allMoves.add(new SimMove(location +1, jumpleftup +1, true, leftup+1));
 								}
 							}
 						}
 						
 					} else {
 						
-						allMoves.add(new Move(location +1, leftup +1, false, -1));
+						allMoves.add(new SimMove(location +1, leftup +1, false, -1));
 					}
 				}
 			}
@@ -323,14 +323,14 @@ public class MediumAI {
 							
 								if(!(AT.get(jumprightup).isOccupied())){
 								
-									allMoves.add(new Move(location +1, jumprightup +1, true, rightup+1));
+									allMoves.add(new SimMove(location +1, jumprightup +1, true, rightup+1));
 								}
 							}
 						}
 						
 					} else {
 						
-						allMoves.add(new Move(location +1, rightup +1, false, -1));
+						allMoves.add(new SimMove(location +1, rightup +1, false, -1));
 					}
 				}
 			}
@@ -347,14 +347,14 @@ public class MediumAI {
 					
 								if(!(AT.get(jumpleftdown).isOccupied())){
 					
-									allMoves.add(new Move(location +1, jumpleftdown +1, true, leftdown+1));
+									allMoves.add(new SimMove(location +1, jumpleftdown +1, true, leftdown+1));
 								}
 							}
 						}
 			
 					} else {
 			
-						allMoves.add(new Move(location +1, leftdown +1, false, -1));
+						allMoves.add(new SimMove(location +1, leftdown +1, false, -1));
 					}
 				}	
 			}
@@ -371,14 +371,14 @@ public class MediumAI {
 				
 								if(!(AT.get(jumprightdown).isOccupied())){
 					
-									allMoves.add(new Move(location +1, jumprightdown +1, true, rightdown+1));
+									allMoves.add(new SimMove(location +1, jumprightdown +1, true, rightdown+1));
 								}
 							}
 						}
 			
 					} else {
 			
-						allMoves.add(new Move(location +1, rightdown +1, false, -1));
+						allMoves.add(new SimMove(location +1, rightdown +1, false, -1));
 					}
 				}
 			}

@@ -20,6 +20,11 @@ public class Communicator {
 	static int y2;
 
 	public static void main(String args[]) throws Exception {
+		
+		//Move prevmove = new Move(0,0,false,0);
+		//prevmove.setScore(0);
+		//double average = 100;
+		
 		//readFromJSON();
 	/*	Game g = new Game();
 
@@ -28,7 +33,7 @@ public class Communicator {
 		while(g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles)) {
 
 			if(RobotMove) {
-
+				// average = ((average + previousMove.getScore())/3) + 10;
 				Move m = g.mediumAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
 				sendMove(m);
 				RobotMove = false;
@@ -36,7 +41,7 @@ public class Communicator {
 
 			ArrayList<Pieces> tempPrevious = g.AllPieces;
 			ArrayList<Pieces> allpieces = readAllPieces();
-			Move r = findMove(tempPrevious, allpieces);
+			Move prevmove = findMove(tempPrevious, allpieces);
 
 			if(legalMove(allpieces, r)) {
 
@@ -158,6 +163,11 @@ public class Communicator {
 				m = new Move(changed.get(1).getLocation(), moved.get(0).getLocation(), jump, 0);
 			}
 		}
+		
+		Game temp = new Game();
+		temp.updateGameState(current);
+		double score = temp.calculateHeuristics(2, 1, 1, 1, 1, 1, 1, 1, 1, temp.AllTiles, temp.RobotPieces, temp.PlayerPieces);
+		m.setScore(score);
 		
 		return m;
 	}

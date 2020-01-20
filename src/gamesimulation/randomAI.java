@@ -8,9 +8,9 @@ public class randomAI {
 		
 	}
 	
-	public Move returnMove(ArrayList<Move> moves) {
+	public SimMove returnMove(ArrayList<SimMove> moves) {
 		
-		ArrayList<Move> captures = new ArrayList<Move>();
+		ArrayList<SimMove> captures = new ArrayList<SimMove>();
 		
 		for(int i = 0; i < moves.size(); i++) {
 			

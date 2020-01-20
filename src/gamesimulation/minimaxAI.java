@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class minimaxAI {
 
-	public minimaxAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player, int depth){
+	public minimaxAI(ArrayList<Tiles> AllTiles, ArrayList<SimPieces> RobotPieces, ArrayList<SimPieces> PlayerPieces, int player, int depth){
 	
 		Node root = new Node(null, new ArrayList<Node>(), AllTiles, RobotPieces, PlayerPieces, false, 0, 0, null);
 		Tree tree = new Tree(root, player);
@@ -18,7 +18,7 @@ public class minimaxAI {
 	
 	private Tree tree;
 	
-	public Move returnMove() {
+	public SimMove returnMove() {
 		
 		alphabeta(tree.getRoot(), 0, -100000000, 100000000, false);
 		
@@ -59,7 +59,7 @@ public class minimaxAI {
 		
 		if(found) {
 			
-			ArrayList<Move> bestStuff = new ArrayList<Move>();
+			ArrayList<SimMove> bestStuff = new ArrayList<SimMove>();
 			
 			for(int i = 0; i < captures.size(); i++) {
 			
@@ -83,7 +83,7 @@ public class minimaxAI {
 				}
 			}
 			
-			ArrayList<Move> bestStuff = new ArrayList<Move>();
+			ArrayList<SimMove> bestStuff = new ArrayList<SimMove>();
 			
 			for(int i = 0; i < allMoves.size(); i++) {
 			

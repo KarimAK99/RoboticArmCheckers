@@ -1,8 +1,8 @@
 package gamesimulation;
 
-public class Pieces {
+public class SimPieces {
 
-	public Pieces(boolean robot, boolean king, int location) {
+	public SimPieces(boolean robot, boolean king, int location) {
 		
 		this.robot = robot;
 		this.king = king;
@@ -10,7 +10,7 @@ public class Pieces {
 		
 	}
 
-	public Pieces(Pieces piece) {
+	public SimPieces(SimPieces piece) {
 		
 		this.robot = piece.isRobot();
 		this.king = piece.isKing();
