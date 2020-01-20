@@ -190,9 +190,9 @@ def main():
     duration = end - start
     print(duration)
 
-    cv2.imshow('detected circles', img)
-    cv2.imshow('detected red1', mask1R)
-    cv2.imshow('detected red2', mask2R)
-    cv2.imshow('detected red', maskR)
-    cv2.waitKey(0)
+    #cv2.imshow('detected circles', img)
+    #cv2.imshow('detected red1', mask1R)
+    #cv2.imshow('detected red2', mask2R)
+    #cv2.imshow('detected red', maskR)
+    #cv2.waitKey(0)
     cv2.destroyAllWindows()
