@@ -116,7 +116,7 @@ for i in circles[0, :]:
     # print(img[i[1],i[0]])
     for row in range(y, y + h):
         for col in range(x, x + w):
-            if (math.sqrt((i[0] - col) ** 2 + (i[1] - row) ** 2) <= i[2]):
+            if (math.sqrt((i[0] - col) ** 2 + (i[1] - row) ** 2) <= i[2]-2):
                 # print("i got here")
                 blue = img[row, col, 0]
                 green = img[row, col, 1]
@@ -139,7 +139,7 @@ for i in circles[0, :]:
                 # print(whiteCntr)
     # print(blackCntr)
     # print(whiteCntr)
-    #print(queenCntr)
+    print(queenCntr)
     if (queenCntr > 200):
         if (blackCntr > whiteCntr):
             # print('black')
