@@ -19,42 +19,57 @@ public class Communicator {
 	static int y1;
 	static int y2;
 
+	static Move m = new Move(0,0,false,0);
+	
 	public static void main(String args[]) throws Exception {
 		
 		//Move prevmove = new Move(0,0,false,0);
 		//prevmove.setScore(0);
 		//double average = 100;
 		
-		//readFromJSON();
-	/*	Game g = new Game();
+		readFromJSON();
+		// System.out.println("hiiii");
+		Game g = new Game();
+		g.updateGameState(readAllPieces());
 
 		boolean RobotMove = true;
+		
+		System.out.println(g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles));
 
-		while(g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles)) {
+		while(!g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles)) {
 
 			if(RobotMove) {
+				//System.out.println("hii");
 				// average = ((average + previousMove.getScore())/3) + 10;
 				Move m = g.mediumAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
+				System.out.println("Move: start " + m.getStart() + " end: " + m.getEnd() + " score: " + m.getScore());
 				sendMove(m);
 				RobotMove = false;
 			}
 
+			//System.out.println("hi");
+			
 			ArrayList<Pieces> tempPrevious = g.AllPieces;
 			ArrayList<Pieces> allpieces = readAllPieces();
-			Move prevmove = findMove(tempPrevious, allpieces);
+			
+			if(findMove(tempPrevious, allpieces)) {
+				
+				Move prevmove = m;
+				
+				if(legalMove(allpieces, prevmove)) {
 
-			if(legalMove(allpieces, r)) {
+					g.playMove(prevmove, g.AllTiles, g.RobotPieces, g.PlayerPieces);
+					sendLegality(true);
+					RobotMove = true;
+				} else {
 
-				g.playMove(r, g.AllTiles, g.RobotPieces, g.PlayerPieces);
-				sendLegality(true);
-				RobotMove = true;
-			} else {
-
-				//System.out.println("ERROR: Illegal move played");
-				sendLegality(false);
+					//System.out.println("ERROR: Illegal move played");
+					sendLegality(false);
+				}
 			}
+			
 
-		} */
+		} 
 		
 		x1 = 1;
 		x2 =7 ;
@@ -70,9 +85,9 @@ public class Communicator {
 	}
 
 	// Method that should read move that player plays from CV
-	private static Move findMove(ArrayList<Pieces> prev, ArrayList<Pieces> current) {
-
-		Move m = null;
+	private static Boolean findMove(ArrayList<Pieces> prev, ArrayList<Pieces> current) {
+		
+		boolean movefound = false;
 		
 		ArrayList<Pieces> changed = new ArrayList<Pieces>();
 		ArrayList<Pieces> moved = new ArrayList<Pieces>();
@@ -127,6 +142,7 @@ public class Communicator {
 			}
 			
 			m = new Move(changed.get(0).getLocation(), moved.get(0).getLocation(), jump, 0); 
+			movefound = true;
 		}
 		
 		if(changed.size() == 2) {
@@ -145,6 +161,7 @@ public class Communicator {
 				}
 				
 				m = new Move(changed.get(0).getLocation(), moved.get(0).getLocation(), jump, 0);
+				movefound = true;
 			}
 			
 			if(changed.get(1).isRobot() == moved.get(0).isRobot()) {
@@ -161,6 +178,7 @@ public class Communicator {
 				}
 				
 				m = new Move(changed.get(1).getLocation(), moved.get(0).getLocation(), jump, 0);
+				movefound = true;
 			}
 		}
 		
@@ -169,7 +187,8 @@ public class Communicator {
 		double score = temp.calculateHeuristics(2, 1, 1, 1, 1, 1, 1, 1, 1, temp.AllTiles, temp.RobotPieces, temp.PlayerPieces);
 		m.setScore(score);
 		
-		return m;
+		
+		return movefound;
 	}
 
 	// Method that should read all the current pieces on the board
@@ -215,13 +234,13 @@ public class Communicator {
 			if (yPos[i] == 7 && xPos[i] == 6) {location = 4;}
 			
 			boolean robotPiece;
-			//if(color[i] == ?) {robotPiece = true;} else {robotPiece = false;}
+			if(color[i] == 1) {robotPiece = true;} else {robotPiece = false;}
 			
 			boolean kingPiece;
-			//if(king[i] == ?) {kingPiece = true;} else {kingPiece = false;}
+			if(queen[i] == 1) {kingPiece = true;} else {kingPiece = false;}
 			
-			//Pieces p = new Pieces(robotPiece, kingPiece, location);
-			//readPieces.add(p);
+			Pieces p = new Pieces(robotPiece, kingPiece, location);
+			readPieces.add(p);
 			
 			
 		}
@@ -450,6 +469,7 @@ public class Communicator {
 			j+=4; x+=4; y+=4; w+=4;
 		}
 
+		
 	}
 }
 
