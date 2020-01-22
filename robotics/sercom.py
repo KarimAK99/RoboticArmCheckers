@@ -172,13 +172,15 @@ def automaticMode(ser):
     
 
     # pause = input("press enter continue")
-    while 1:
-    #position = readJJava()
+    move = readJson()
+    if move == 'allowed to move':
+        
+        position = readJJava()
         # Starting board position (read dis).
-        obX = int(input("old x coordinate for the board please-- "))
-        obY = int(input("old y coordinate for the board please-- "))
-        dbX = int(input("Desired x coordinate for the board please-- "))
-        dbY = int(input("Desired y coordinate for the board please-- "))
+        obX = position[0]
+        obY = position[2]
+        dbX = position[1]
+        dbY = position[3]
         
         # Adjust the y plane to match the other code.
         #obY = 8 - obY
@@ -203,11 +205,9 @@ def automaticMode(ser):
         # Raise the arm with the piece.
         push(ser, 2, thetaOne, 140, thetaTwo, 0)
 
-        # Move arm and drop piece in new desired postition.
-        push(ser, 3, thetaEen, 170, thetaTwee, 1)
+        # Lower arm and drop piece in new desired postition.
 
-        # Raise arm without the piece, restart magnetism.
-        push(ser, 4, thetaEen, 0, thetaTwee, 0)
+        push(ser, 3, thetaEen, 170, thetaTwee, 1)
 
         # Raise arm without the piece, restart magnetism.
         push(ser, 4, thetaEen, 0, thetaTwee, 0)
@@ -216,17 +216,37 @@ def automaticMode(ser):
     ser.close() # ZZZ comment out if calling automaticMode(ser) instead of main() from pyMain.py 
 
 
+def readJson():
+    with open('data.json') as read:
+        data = json.load(read)
+        for d in data['move']:
+            move = d['move']
+        return move
+
+
+def readJJava():
+    with open('moveToControl.json') as read:
+        data = json.load(read)
+    for d in data['positions']:
+        xOld = d['xOld']
+        xNew = d['xNew']
+        yOld = d['yOld']
+        yNew = d['yNew']
+        positions = [xOld, xNew, yOld, yNew]
+        print('positions', positions)
+        return positions
+
 #
 #   START CODE
 # ==================================================
 
-
-baudRate = 9600
-#serPort = "/dev/ttyACM0" # Portname on Olive's laptop, can be find in bottom right corner of arduino.
-serPort = '/dev/ttyACM1'
-ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
-print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
-startMarker = 60
-endMarker = 62
-
-automaticMode(ser)
+'''def main():
+    baudRate = 9600
+    #serPort = "/dev/ttyACM0" # Portname on Olive's laptop, can be find in bottom right corner of arduino.
+    serPort = '/dev/ttyCOM11'
+    ser = serial.Serial(serPort, baudRate, timeout=5) # YYY microcontroller dependency.
+    print("Serial port " + serPort + " opened/ Baudrate " + str(baudRate))
+    startMarker = 60
+    endMarker = 62
+    
+    automaticMode(ser)'''
