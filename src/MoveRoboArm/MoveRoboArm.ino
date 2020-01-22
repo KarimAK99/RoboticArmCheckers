@@ -4,12 +4,14 @@
  *  Finetune parameters:
  *    -movement boundaries
  *    -movement delay times
+ *    
+ *  Send message to computer to indicate movement completion.
  */
 
 //Specification of PWM limits (for servo: TGY 50090M Servo):
 //Please enter the servo min and max limits for servo 1 and 2 here
 //You can find the corresponding limits on a note in your EDMO-box
-int SERVOMIN[]  {123, 131, 107}; //{min Servo1, min Servo 2} ->this is the 'minimum' pulse length count (out of 4096) for each servo
+int SERVOMIN[]  {123, 111, 107}; //{min Servo1, min Servo 2} ->this is the 'minimum' pulse length count (out of 4096) for each servo
 int SERVOMAX[]  {532, 340, 545}; //{max Servo1, max Servo 2} ->this is the 'maximum' pulse length count (out of 4096) for each servo
 
 #define NUM_MOTORS 3 // for now we only use two joints simultaneously
@@ -86,8 +88,10 @@ void loop()
           getData(record); // extract motor positions from data package
           writeToMotor(); // write pwm values to motor
           printData(pwmvalue); // for bebugging send pwm values to monitor
-        }
-                
+          
+          // Send a return message signalling completion.
+          Serial.write("movement complete\n");
+        }            
     }
 }
 
@@ -114,10 +118,6 @@ void writeToMotor()
     // Correct input amount check.
     if(i == (NUM_MOTORS+1))
     {
-        // Preset the magnet, for convenience while playing.
-        if(incoming[NUM_MOTORS] == 0) electromagnetOff();
-        else if(incoming[NUM_MOTORS] == 1) electromagnetOn();
-
         // Loop though actuators to set new positions.
         for (byte j = 0 ; j < (NUM_MOTORS) ; j++)
         { 
@@ -161,14 +161,29 @@ void writeToMotor()
             }
             startPos[j] = pwmvalue[j];
           }
-          
+
+          //Serial.print("j before crazybullshit");
+          //Serial.print(j);
+          // Crazy adjustment bullshit.
+          if (j == 0) {j = 254;}// Go to temp.
+          else if (j == 2) {j = 0;}// Go to second actuator.
+          else if (j == 1) {j = 2;}// End the for loop. 
+          if (j == 254) {j = 1;} // Go third actuator.
+          //Serial.print("j after crazybullshit");
+          //Serial.print(j);
+               
           // Changing to next actuator.
           delay(shortDelay);
-        }
-    }
+        }  
+        
+        // Change magnetism.
+        delay(longDelay);
+        if(incoming[NUM_MOTORS] == 0) electromagnetOff();
+        else if(incoming[NUM_MOTORS] == 1) electromagnetOn();     
+    }  
     else
     {
-        Serial.println("Enter correct number of values separated by commas!");
+        Serial.println("\nEnter correct number of values separated by commas!");
     }
 }
 
@@ -197,20 +212,20 @@ void setCalib(int motor,int val)
     if(motor < NUM_MOTORS)
         calib[motor] = val;
     else
-       Serial.println("Enter a valid motor number"); 
+       Serial.println("\nEnter a valid motor number"); 
 }
 
 // Electromagnetic code.
 void electromagnetOff()
 {
     digitalWrite(6,LOW);
-    Serial.println("Set to low. Turning magnetism on...");
+    Serial.println("\nSet to low. Turning magnetism on...");
     delay(longDelay); // So that the magnet has time to pick up a piece.
 }
 
 void electromagnetOn()
 {
     digitalWrite(6,HIGH);
-    Serial.println("Set to high. Turning magnetism off... Please beware of heat");
+    Serial.println("\nSet to high. Turning magnetism off... Please beware of heat");
     delay(shortDelay);
 }
