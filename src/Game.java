@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import gamesimulation.SimPieces;
+
 
 public class Game {
 	
@@ -294,8 +296,12 @@ public class Game {
 							if(jumpleftup != -2) {
 							
 								if(!(AllTiles.get(jumpleftup).isOccupied())){
-								
-									allMoves.add(new Move(location +1, jumpleftup +1, true, leftup+1));
+									
+									if(AllTiles.get(leftup).getStatus() == AllTiles.get(location).getStatus()) {
+										allMoves.add(new Move(location +1, jumpleftup +1, true, -1));
+									} else {
+										allMoves.add(new Move(location +1, jumpleftup +1, true, leftup+1));	
+									}
 								}
 							}
 						}
@@ -318,8 +324,14 @@ public class Game {
 							if(jumprightup != -2) {
 							
 								if(!(AllTiles.get(jumprightup).isOccupied())){
-								
-									allMoves.add(new Move(location +1, jumprightup +1, true, rightup+1));
+									
+									if(AllTiles.get(rightup).getStatus() == AllTiles.get(location).getStatus()) {
+
+										allMoves.add(new Move(location +1, jumprightup +1, true, -1));
+									} else {
+
+										allMoves.add(new Move(location +1, jumprightup +1, true, rightup+1));
+									}
 								}
 							}
 						}
@@ -343,7 +355,13 @@ public class Game {
 					
 								if(!(AllTiles.get(jumpleftdown).isOccupied())){
 					
-									allMoves.add(new Move(location +1, jumpleftdown +1, true, leftdown+1));
+									if(AllTiles.get(leftdown).getStatus() == AllTiles.get(location).getStatus()) {
+
+										allMoves.add(new Move(location +1, jumpleftdown +1, true, -1));
+									} else {
+
+										allMoves.add(new Move(location +1, jumpleftdown +1, true, leftdown+1));
+									}
 								}
 							}
 						}
@@ -366,8 +384,12 @@ public class Game {
 							if(jumprightdown != -2) {
 				
 								if(!(AllTiles.get(jumprightdown).isOccupied())){
-					
-									allMoves.add(new Move(location +1, jumprightdown +1, true, rightdown+1));
+									
+									if(AllTiles.get(rightdown).getStatus() == AllTiles.get(location).getStatus()) {
+										allMoves.add(new Move(location +1, jumprightdown +1, true, -1));	
+									} else {
+										allMoves.add(new Move(location +1, jumprightdown +1, true, rightdown+1));	
+									}
 								}
 							}
 						}
@@ -480,7 +502,7 @@ public class Game {
 				RobotPieces.get(index).setKing(true);
 			}
 			
-			if(move.getCapture() > -1) {
+			if(move.getCapture() > 0) {
 				
 				int remove = 0;
 				
@@ -566,9 +588,25 @@ public class Game {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
 		
-		ArrayList<Tiles> AT = AllTiles;
-		ArrayList<Pieces> RP = RobotPieces;
-		ArrayList<Pieces> PP = PlayerPieces;
+ 		ArrayList<Tiles> AT = new ArrayList<Tiles>();
+		ArrayList<Pieces> RP = new ArrayList<Pieces>();
+		ArrayList<Pieces> PP = new ArrayList<Pieces>();
+ 		
+ 		for(int i = 0; i < AllTiles.size(); i++) {
+ 			
+ 			AT.add(new Tiles(AllTiles.get(i)));
+ 			AT.get(i).setStatus(AllTiles.get(i).getStatus());
+ 		}
+ 		
+ 		for(int i = 0; i < RobotPieces.size(); i++) {
+ 			
+ 			RP.add(new Pieces(RobotPieces.get(i)));
+ 		}
+ 		
+ 		for(int i = 0; i < PlayerPieces.size(); i++) {
+			
+			PP.add(new Pieces(PlayerPieces.get(i)));
+		}
 		
 		ArrayList<Double> scores = new ArrayList<Double>();
 				
@@ -673,11 +711,27 @@ public class Game {
  	public Move mediumAI(ArrayList<Tiles> AllTiles, ArrayList<Pieces> RobotPieces, ArrayList<Pieces> PlayerPieces, int player) {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
- 		System.out.println("MOVES: " + moves.size());
-		
-		ArrayList<Tiles> AT = AllTiles;
-		ArrayList<Pieces> RP = RobotPieces;
-		ArrayList<Pieces> PP = PlayerPieces;
+ 		//System.out.println("MOVES: " + moves.size());
+
+		ArrayList<Tiles> AT = new ArrayList<Tiles>();
+		ArrayList<Pieces> RP = new ArrayList<Pieces>();
+		ArrayList<Pieces> PP = new ArrayList<Pieces>();
+ 		
+ 		for(int i = 0; i < AllTiles.size(); i++) {
+ 			
+ 			AT.add(new Tiles(AllTiles.get(i)));
+ 			AT.get(i).setStatus(AllTiles.get(i).getStatus());
+ 		}
+ 		
+ 		for(int i = 0; i < RobotPieces.size(); i++) {
+ 			
+ 			RP.add(new Pieces(RobotPieces.get(i)));
+ 		}
+ 		
+ 		for(int i = 0; i < PlayerPieces.size(); i++) {
+			
+			PP.add(new Pieces(PlayerPieces.get(i)));
+		}
 		
 		ArrayList<Double> scores = new ArrayList<Double>();
 				
@@ -753,9 +807,25 @@ public class Game {
 		
  		ArrayList<Move> moves = findMoves(RobotPieces, AllTiles);
 		
-		ArrayList<Tiles> AT = AllTiles;
-		ArrayList<Pieces> RP = RobotPieces;
-		ArrayList<Pieces> PP = PlayerPieces;
+ 		ArrayList<Tiles> AT = new ArrayList<Tiles>();
+		ArrayList<Pieces> RP = new ArrayList<Pieces>();
+		ArrayList<Pieces> PP = new ArrayList<Pieces>();
+ 		
+ 		for(int i = 0; i < AllTiles.size(); i++) {
+ 			
+ 			AT.add(new Tiles(AllTiles.get(i)));
+ 			AT.get(i).setStatus(AllTiles.get(i).getStatus());
+ 		}
+ 		
+ 		for(int i = 0; i < RobotPieces.size(); i++) {
+ 			
+ 			RP.add(new Pieces(RobotPieces.get(i)));
+ 		}
+ 		
+ 		for(int i = 0; i < PlayerPieces.size(); i++) {
+			
+			PP.add(new Pieces(PlayerPieces.get(i)));
+		}
 		
 		ArrayList<Double> scores = new ArrayList<Double>();
 				
@@ -827,11 +897,27 @@ public class Game {
 		return bestMoves.get(move);
 	}
  	
- 	private Move adaptiveAI(ArrayList<Move> moves, int player, double av) {
+ 	public Move adaptiveAI(ArrayList<Move> moves, int player, double av) {
  			
- 			ArrayList<Tiles> AT = AllTiles;
- 			ArrayList<Pieces> RP = RobotPieces;
- 			ArrayList<Pieces> PP = PlayerPieces;
+ 		ArrayList<Tiles> AT = new ArrayList<Tiles>();
+		ArrayList<Pieces> RP = new ArrayList<Pieces>();
+		ArrayList<Pieces> PP = new ArrayList<Pieces>();
+ 		
+ 		for(int i = 0; i < AllTiles.size(); i++) {
+ 			
+ 			AT.add(new Tiles(AllTiles.get(i)));
+ 			AT.get(i).setStatus(AllTiles.get(i).getStatus());
+ 		}
+ 		
+ 		for(int i = 0; i < RobotPieces.size(); i++) {
+ 			
+ 			RP.add(new Pieces(RobotPieces.get(i)));
+ 		}
+ 		
+ 		for(int i = 0; i < PlayerPieces.size(); i++) {
+			
+			PP.add(new Pieces(PlayerPieces.get(i)));
+		}
  			
  			ArrayList<Double> scores = new ArrayList<Double>();
  					

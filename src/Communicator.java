@@ -23,12 +23,11 @@ public class Communicator {
 	
 	public static void main(String args[]) throws Exception {
 		
-		//Move prevmove = new Move(0,0,false,0);
-		//prevmove.setScore(0);
-		//double average = 100;
+		Move prevmove = new Move(0,0,false,0);
+		prevmove.setScore(0);
+		double average = 100;
 		
 		readFromJSON();
-		// System.out.println("hiiii");
 		Game g = new Game();
 		g.updateGameState(readAllPieces());
 
@@ -37,24 +36,30 @@ public class Communicator {
 		System.out.println(g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles));
 
 		while(!g.hasGameEnded(g.RobotPieces, g.PlayerPieces, g.AllTiles)) {
-
+			
+			System.in.read();
+			
 			if(RobotMove) {
-				//System.out.println("hii");
-				// average = ((average + previousMove.getScore())/3) + 10;
-				Move m = g.mediumAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
-				System.out.println("Move: start " + m.getStart() + " end: " + m.getEnd() + " score: " + m.getScore());
-				sendMove(m);
-				RobotMove = false;
+				average = ((average + prevmove.getScore())/3) + 10;
+				//Move t = g.easyAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
+				//Move t = g.mediumAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
+				//Move t = g.hardAI(g.AllTiles, g.RobotPieces, g.PlayerPieces, 1);
+				Move t = g.adaptiveAI(g.findMoves(g.RobotPieces, g.AllTiles), 1, average);
+				System.out.println("Move: start " + t.getStart() + " end: " + t.getEnd());
+				sendMove(t);
+				g.playMove(t, g.AllTiles, g.RobotPieces, g.PlayerPieces);
+				g.printBoard(g.AllTiles);
+				RobotMove = true;
 			}
 
-			//System.out.println("hi");
+			System.in.read();
 			
 			ArrayList<Pieces> tempPrevious = g.AllPieces;
 			ArrayList<Pieces> allpieces = readAllPieces();
 			
 			if(findMove(tempPrevious, allpieces)) {
-				
-				Move prevmove = m;
+			
+				prevmove = m;
 				
 				if(legalMove(allpieces, prevmove)) {
 
@@ -77,10 +82,10 @@ public class Communicator {
 		y2 = 3;
 		writeToJSON();
 		readFromJSON();
-		System.out.println(Arrays.toString(color));
-		System.out.println(Arrays.toString(xPos));
-		System.out.println(Arrays.toString(yPos));
-		System.out.println(Arrays.toString(queen));
+	//	System.out.println(Arrays.toString(color));
+	//	System.out.println(Arrays.toString(xPos));
+	//	System.out.println(Arrays.toString(yPos));
+	//	System.out.println(Arrays.toString(queen));
 
 	}
 
@@ -184,7 +189,7 @@ public class Communicator {
 		
 		Game temp = new Game();
 		temp.updateGameState(current);
-		double score = temp.calculateHeuristics(2, 1, 1, 1, 1, 1, 1, 1, 1, temp.AllTiles, temp.RobotPieces, temp.PlayerPieces);
+		double score = temp.calculateHeuristics(2, 1, 1, 1, 2, 1, 1.5, 1, 1, temp.AllTiles, temp.RobotPieces, temp.PlayerPieces);
 		m.setScore(score);
 		
 		
@@ -444,7 +449,7 @@ public class Communicator {
 			if (test.contains("board")){
 				String ans = test.substring(test.indexOf("["),test.indexOf("]}"));
 				data = ans.substring(1);
-				System.out.println("data" + data);
+			//	System.out.println("data" + data);
 			}
 		}
 		//remove useless char
