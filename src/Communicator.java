@@ -49,11 +49,12 @@ public class Communicator {
 				sendMove(t);
 				g.playMove(t, g.AllTiles, g.RobotPieces, g.PlayerPieces);
 				g.printBoard(g.AllTiles);
-				RobotMove = true;
+				RobotMove = false;
 			}
 
 			System.in.read();
 			
+			g.updateAllPieces();
 			ArrayList<Pieces> tempPrevious = g.AllPieces;
 			ArrayList<Pieces> allpieces = readAllPieces();
 			
@@ -370,6 +371,7 @@ public class Communicator {
 	// Method that should send the legality of the move played by the player back to CV
 	private static void sendLegality(boolean legal) {
 
+		System.out.println("Player move legality: " + legal);
 		// pause if move isn't legal?
 		
 /*		if(!legal) {

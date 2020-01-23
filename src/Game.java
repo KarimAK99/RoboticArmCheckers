@@ -55,6 +55,19 @@ public class Game {
 		
 	}
 	
+	public void updateAllPieces() {
+		
+		AllPieces.clear();
+		
+		for(int i = 0; i < RobotPieces.size(); i++) {
+			AllPieces.add(RobotPieces.get(i));
+		}
+		for(int i = 0; i < PlayerPieces.size(); i++) {
+			AllPieces.add(PlayerPieces.get(i));
+		}
+		
+	}
+	
 	private void createTiles(){
 		
 		Tiles tile1 = new Tiles(1, false, -1, 5, -1, -1, -1, 10, -1, -1);
