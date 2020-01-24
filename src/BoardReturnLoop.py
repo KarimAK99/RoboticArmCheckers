@@ -184,7 +184,7 @@ def main():
     boardData['board'].append({
         'board': circle_position
     })
-    with open('boardData.json', 'w') as boardState:
+    with open('src/boardData.json', 'w') as boardState:
         json.dump(boardData, boardState)
 
     end = milli_sec = int(round(time.time() * 1000))
@@ -196,4 +196,5 @@ def main():
     #cv2.imshow('detected red2', mask2R)
     #cv2.imshow('detected red', maskR)
     #cv2.waitKey(0)
+    #input('Press Enter to continue ...')
     cv2.destroyAllWindows()
